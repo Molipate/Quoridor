@@ -79,6 +79,7 @@ public class View extends JFrame{
                 for (int j = 0; j < 9; j++) {
                     plateau[i][j].setSize(new Dimension(40, 40));
                     plateau[i][j].setBounds(j*54+100,i*54+100, 40, 40);
+                    plateau[i][j].setBackground(null);
                     switch (model.getPlateau(i, j)){
                         case 1:
                             plateau[i][j].setBackground(Color.red);
@@ -87,7 +88,7 @@ public class View extends JFrame{
                             plateau[i][j].setBackground(Color.blue);
                             break;
                     }
-                    if(model.isMoveFree(i, j))
+                    if(model.isPlayerSelected() && model.isMoveFree(i, j))
                         plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.green, 4));
                     else
                         plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.black));

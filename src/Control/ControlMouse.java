@@ -25,24 +25,51 @@ public class ControlMouse extends Control implements ActionListener {
             view.leave();
 
         if(actionEvent.getSource() == view.getVerticalWall()) {
-            model.selectWall(1);
             System.out.println("-> Selected Vertical Wall");
+            if(!model.isWallSelect())
+                model.selectWall(1);
+            else
+                model.selectWall(-1);
+
+            for (int i = 0; i < 9; i++)
+                for (int j = 0; j < 9; j++)
+                    if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                        model.selectPlayer(-1, i, j);
+
             view.makeView();
         }
 
         if(actionEvent.getSource() == view.getHorizontalWall()){
-            model.selectWall(2);
-            System.out.println("-> Selected Horizontal Wall");
+            System.out.println("-> Selected Vertical Wall");
+            if(!model.isWallSelect())
+                model.selectWall(2);
+            else
+                model.selectWall(-1);
+
+            for (int i = 0; i < 9; i++)
+                for (int j = 0; j < 9; j++)
+                    if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                        model.selectPlayer(-1, i, j);
+
             view.makeView();
         }
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (actionEvent.getSource() == view.getPlateau(i, j)) {
-                    if(model.getPlateau(i, j) != 0){
-                        model.selectPlayer(model.getPlateau(i, j), i, j);
-                        view.makeView();
-                    }
+                    if(model.getPlateau(i, j) != 0)
+                        if(!model.isPlayerSelected())
+                            model.selectPlayer(model.getPlateau(i, j), i, j);
+                        else
+                            model.selectPlayer(-1, i, j);
+                    else if(model.getPlateau(i, j) == 0 && model.isMoveFree(i, j))
+                        model.movePlayer(i, j);
+                    else
+                        model.selectPlayer(-1, i, j);
+
+                    if(model.isWallSelect())
+                        model.selectWall(-1);
+                    view.makeView();
                 }
             }
         }

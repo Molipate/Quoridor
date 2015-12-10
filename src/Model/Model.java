@@ -83,7 +83,7 @@ public class Model {
     }
 
     public void selectPlayer(int k, int i, int j){
-        typePlayer = i;
+        typePlayer = k;
         makeAllowedMove(i, j);
     }
 
@@ -99,6 +99,10 @@ public class Model {
     }
 
     private void makeAllowedMove(int i, int j){
+
+        for (int k = 0; k <9; k++)
+            for (int l = 0; l < 9; l++)
+                freeMove[k][l] = false;
 
         if(i>=0 || i<9 || j>=0 || j<9){
             if(i>0 && plateau[i-1][j]==0)freeMove[i-1][j]=true;
@@ -133,6 +137,4 @@ public class Model {
             }
         }
     }
-
-
 }
