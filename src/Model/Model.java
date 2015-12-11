@@ -99,8 +99,22 @@ public class Model {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if(wall[i][j] != 0){
-                    freeWall[i][j] = false;
+                freeWall[i][j] = true;
+                if(wall[i][j] == 0){
+                    switch (typeWall){
+                        case 1:
+                            if(i > 0 && wall[i - 1][j] == 1)
+                                freeWall[i][j] = false;
+                            if(i < 7 && wall[i + 1][j] == 1)
+                                freeWall[i][j] = false;
+                            break;
+                        case 2:
+                            if(j > 0 && wall[i][j - 1] == 2)
+                                freeWall[i][j] = false;
+                            if(j < 7 && wall[i][j + 1] == 2)
+                                freeWall[i][j] = false;
+                            break;
+                    }
                 }
             }
         }
