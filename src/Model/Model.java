@@ -10,6 +10,10 @@ public class Model {
     private int typeWall;
     private int typePlayer;
 
+    private int activePlayer;
+    private int nbWallsJ1;
+    private int nbWallsJ2;
+
     private int[][] plateau;
     private int[][] wall;
 
@@ -20,6 +24,10 @@ public class Model {
         gameState = 0;
         typeWall = -1;
         typePlayer = -1;
+
+        activePlayer = 1;
+        nbWallsJ1 = 10;
+        nbWallsJ2 = 10;
 
         plateau = new int[9][9];
         for (int i = 0; i < 9; i++)
@@ -124,6 +132,13 @@ public class Model {
     public void placeWall(int i, int j) {
         wall[i][j] = typeWall;
         typeWall = -1;
+
+        if(activePlayer == 1)
+            nbWallsJ1--;
+        else
+            nbWallsJ2--;
+
+        changePlayer();
     }
 
     public void movePlayer(int i, int j){
@@ -136,5 +151,23 @@ public class Model {
                 }
             }
         }
+    }
+
+    public int getActivePlayer(){
+        return activePlayer;
+    }
+
+    public void changePlayer(){
+        if(activePlayer == 1)
+            activePlayer = 2;
+        else
+            activePlayer = 1;
+    }
+
+    public int getNbWall() {
+        if(activePlayer == 1)
+            return nbWallsJ1;
+        else
+            return nbWallsJ2;
     }
 }

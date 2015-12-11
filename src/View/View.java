@@ -24,6 +24,9 @@ public class View extends JFrame{
     private JButton verticalWall;
     private JButton horizontalWall;
 
+    private JLabel activePlayer;
+    private JLabel remainingWall;
+
     public View(Model model) {
         super();
         setSize(new Dimension(900, 700));
@@ -55,9 +58,11 @@ public class View extends JFrame{
         newGame = new JButton("Nouvelle partie");
         quitGame = new JButton("Quitter le jeu");
 
-
         verticalWall = new JButton();
         horizontalWall = new JButton();
+
+        activePlayer = new JLabel();
+        remainingWall = new JLabel();
 
         verticalWall.setBounds(619,356,14,50);
         horizontalWall.setBounds(601, 302,50,14);
@@ -89,10 +94,10 @@ public class View extends JFrame{
                             break;
                     }
                     if(model.isPlayerSelected() && model.isMoveFree(i, j))
-                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.green, 4));
+                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 4));
                     else
                         plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
-                    add(plateau[i][j]);
+                    panel.add(plateau[i][j]);
                 }
             }
 
@@ -101,7 +106,7 @@ public class View extends JFrame{
 
                     intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 100, (i + 1) * 40 + i * 14 + 100, 14, 14);
                     if (model.isWallSelect() && model.isWallFree(i, j))
-                        intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.green, 2));
+                        intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
                     else if(model.isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -117,12 +122,25 @@ public class View extends JFrame{
                             intersection[i][j].setBounds(j*54+100, (i + 1)*40 + i * 14+100,94,14);
                             break;
                     }
-                    add(intersection[i][j]);
+                    panel.add(intersection[i][j]);
                 }
             }
 
+            activePlayer.setSize(400, 200);
+            activePlayer.setBackground(Color.black);
+            activePlayer.setText("Joueur " + model.getActivePlayer() + " : c'est à toi !");
+            activePlayer.setBounds(700, 100, 900, 200);
+
+            remainingWall.setSize(400, 200);
+            remainingWall.setBackground(Color.black);
+            remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
+            remainingWall.setBounds(700, 120, 900, 200);
+
+
             panel.add(verticalWall);
             panel.add(horizontalWall);
+            panel.add(activePlayer);
+            panel.add(remainingWall);
         }
         setContentPane(panel);
     }
