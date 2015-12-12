@@ -89,6 +89,7 @@ public class View extends JFrame{
                     plateau[i][j].setSize(new Dimension(40, 40));
                     plateau[i][j].setBounds(j*54+100,i*54+100, 40, 40);
                     plateau[i][j].setContentAreaFilled(false);
+                    plateau[i][j].setIcon(model.getAssetsImage().getIcon());
                     switch (model.getPlateau(i, j)){
                         case 1:
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
@@ -98,7 +99,7 @@ public class View extends JFrame{
                             break;
                     }
                     if(model.isPlayerSelected() && model.isMoveFree(i, j))
-                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 4));
+                        plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
                     else
                         plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
                     panel.add(plateau[i][j]);
