@@ -13,7 +13,7 @@ public class AssetsImage {
     protected Model model;
 
 
-    public ImageIcon  IconJ1, IconJ2, WallH, WallV;
+    public ImageIcon  IconJ1, IconJ2, WallH, WallV,intersection;
 
 
 
@@ -31,6 +31,7 @@ public class AssetsImage {
         IconJ2 = new ImageIcon(ImageLoader.loadImage("/Assets/iconJ2.png"));
         WallH = new ImageIcon(ImageLoader.loadImage("/Assets/MH.png"));
         WallV = new ImageIcon(ImageLoader.loadImage("/Assets/MV.png"));
+        intersection = new ImageIcon(ImageLoader.loadImage("/Assets/Intersection.png"));
 
     }
 
@@ -64,5 +65,13 @@ public class AssetsImage {
 
     public void setWallV(ImageIcon wallV) {
         WallV = wallV;
+    }
+
+    public ImageIcon getIntersection() {
+        return intersection;
+    }
+
+    public void setIntersection(ImageIcon intersection) {
+        this.intersection = intersection;
     }
 }

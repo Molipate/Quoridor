@@ -64,8 +64,12 @@ public class View extends JFrame{
         activePlayer = new JLabel();
         remainingWall = new JLabel();
 
-        verticalWall.setBounds(619,356,14,50);
-        horizontalWall.setBounds(601, 302,50,14);
+        verticalWall.setBounds(619,356,14,94);
+        verticalWall.setIcon(model.getAssetsImage().getWallV());
+        verticalWall.setBorder(BorderFactory.createEmptyBorder());
+        horizontalWall.setBounds(601, 302,94,14);
+        horizontalWall.setIcon(model.getAssetsImage().getWallH());
+        horizontalWall.setBorder(BorderFactory.createEmptyBorder());
     }
 
     public void makeView(){
@@ -84,7 +88,7 @@ public class View extends JFrame{
                 for (int j = 0; j < 9; j++) {
                     plateau[i][j].setSize(new Dimension(40, 40));
                     plateau[i][j].setBounds(j*54+100,i*54+100, 40, 40);
-                    plateau[i][j].setBackground(null);
+                    plateau[i][j].setContentAreaFilled(false);
                     switch (model.getPlateau(i, j)){
                         case 1:
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
@@ -96,7 +100,7 @@ public class View extends JFrame{
                     if(model.isPlayerSelected() && model.isMoveFree(i, j))
                         plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 4));
                     else
-                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+                        plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
                     panel.add(plateau[i][j]);
                 }
             }
@@ -105,20 +109,24 @@ public class View extends JFrame{
                 for (int j = 0; j < 8; j++) {
 
                     intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 100, (i + 1) * 40 + i * 14 + 100, 14, 14);
+                    intersection[i][j].setContentAreaFilled(false);
+                    intersection[i][j].setIcon(model.getAssetsImage().getIntersection());
                     if (model.isWallSelect() && model.isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
                     else if(model.isWallFree(i, j))
-                        intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+                        intersection[i][j].setBorder(BorderFactory.createEmptyBorder());
 
                     switch (model.getWall(i, j)) {
                         case 1:
                             intersection[i][j].setEnabled(false);
-                            intersection[i][j].setBackground(Color.black);
+                            intersection[i][j].setIcon(model.getAssetsImage().getWallV());
+                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallV());
                             intersection[i][j].setBounds((j + 1)*40 + j*14+100,  i*54+100,14,94);
                             break;
                         case 2:
                             intersection[i][j].setEnabled(false);
-                            intersection[i][j].setBackground(Color.black);
+                            intersection[i][j].setIcon(model.getAssetsImage().getWallH());
+                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallH());
                             intersection[i][j].setBounds(j*54+100, (i + 1)*40 + i * 14+100,94,14);
                             break;
                     }
