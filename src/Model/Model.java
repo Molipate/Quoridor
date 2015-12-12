@@ -120,7 +120,7 @@ public class Model {
         }
     }
 
-    private void makeAllowedMove(int i, int j){
+    public void makeAllowedMove(int i, int j){
 
         for (int k = 0; k <9; k++)
             for (int l = 0; l < 9; l++)
@@ -183,5 +183,37 @@ public class Model {
             return nbWallsJ1;
         else
             return nbWallsJ2;
+    }
+
+    public int getTypeWall() {
+        return typeWall;
+    }
+
+    public boolean[][] getFreeMove() {
+        return freeMove;
+    }
+
+    public int getTypePlayer() {
+        return typePlayer;
+    }
+
+    public int[][] getWall() {
+        return wall;
+    }
+
+    public boolean[][] getFreeWall() {
+        return freeWall;
+    }
+
+    public int[][] getPlateau() {
+        return plateau;
+    }
+
+    public int getNbWallsJ2() {
+        return nbWallsJ2;
+    }
+
+    public int getNbWallsJ1() {
+        return nbWallsJ1;
     }
 }
