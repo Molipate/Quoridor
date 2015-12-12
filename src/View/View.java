@@ -87,10 +87,10 @@ public class View extends JFrame{
                     plateau[i][j].setBackground(null);
                     switch (model.getPlateau(i, j)){
                         case 1:
-                            plateau[i][j].setBackground(Color.red);
+                            plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                             break;
                         case 2:
-                            plateau[i][j].setBackground(Color.blue);
+                            plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                             break;
                     }
                     if(model.isPlayerSelected() && model.isMoveFree(i, j))

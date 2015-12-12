@@ -20,7 +20,12 @@ public class Model {
     private boolean[][] freeWall;
     private boolean[][] freeMove;
 
+    private AssetsImage assetsImage;
+
     public Model(){
+
+        assetsImage = new AssetsImage(this);
+
         gameState = 0;
         typeWall = -1;
         typePlayer = -1;
@@ -52,6 +57,8 @@ public class Model {
         plateau[0][4] = 1;
         plateau[8][4] = 2;
     }
+
+    public AssetsImage getAssetsImage(){ return assetsImage; }
 
     public int getGameState(){
         return gameState;
