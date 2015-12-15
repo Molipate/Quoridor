@@ -26,7 +26,6 @@ public class View extends JFrame{
 
     private JLabel activePlayer;
     private JLabel remainingWall;
-    private JLabel win;
 
     public View(Model model) {
         super();
@@ -59,16 +58,28 @@ public class View extends JFrame{
         newGame = new JButton("Nouvelle partie");
         quitGame = new JButton("Quitter le jeu");
 
+        newGame.setContentAreaFilled(false);
+        newGame.setFocusPainted(false);
+        quitGame.setContentAreaFilled(false);
+        quitGame.setFocusPainted(false);
+
+        newGame.setFont(new Font("Arial",1,30));
+        quitGame.setFont(new Font("Arial",1,30));
+
         verticalWall = new JButton();
         horizontalWall = new JButton();
 
         activePlayer = new JLabel();
         remainingWall = new JLabel();
+        activePlayer.setFont(new Font("Arial",1,15));
+        remainingWall.setFont(new Font("Arial",1,15));
 
-        win = new JLabel();
-
-        verticalWall.setBounds(619,356,14,50);
-        horizontalWall.setBounds(601, 302,50,14);
+        verticalWall.setBounds(701,264,14,94);
+        verticalWall.setIcon(model.getAssetsImage().getWallV());
+        verticalWall.setBorder(BorderFactory.createEmptyBorder());
+        horizontalWall.setBounds(715, 250,94,14);
+        horizontalWall.setIcon(model.getAssetsImage().getWallH());
+        horizontalWall.setBorder(BorderFactory.createEmptyBorder());
     }
 
     public void makeView(){
@@ -86,20 +97,21 @@ public class View extends JFrame{
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
                     plateau[i][j].setSize(new Dimension(40, 40));
-                    plateau[i][j].setBounds(j*54+100,i*54+100, 40, 40);
-                    plateau[i][j].setBackground(null);
+                    plateau[i][j].setBounds(j*54+200,i*54+100, 40, 40);
+                    plateau[i][j].setContentAreaFilled(false);
+                    plateau[i][j].setIcon(model.getAssetsImage().getIcon());
                     switch (model.getPlateau(i, j)){
                         case 1:
-                            plateau[i][j].setBackground(Color.red);
+                            plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                             break;
                         case 2:
-                            plateau[i][j].setBackground(Color.blue);
+                            plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                             break;
                     }
                     if(model.isPlayerSelected() && model.isMoveFree(i, j))
-                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 4));
+                        plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
                     else
-                        plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+                        plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
                     panel.add(plateau[i][j]);
                 }
             }
@@ -107,53 +119,54 @@ public class View extends JFrame{
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
 
-                    intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 100, (i + 1) * 40 + i * 14 + 100, 14, 14);
-                    if (model.isWallSelect() && model.isWallFree(i, j) && model.getWall(i, j) == 0)
+                    intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 200, (i + 1) * 40 + i * 14 + 100, 14, 14);
+                    intersection[i][j].setContentAreaFilled(false);
+                    intersection[i][j].setIcon(model.getAssetsImage().getIntersection());
+                    if (model.isWallSelect() && model.isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
                     else if(model.isWallFree(i, j))
-                        intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+                        intersection[i][j].setBorder(BorderFactory.createEmptyBorder());
 
                     switch (model.getWall(i, j)) {
                         case 1:
                             intersection[i][j].setEnabled(false);
-                            intersection[i][j].setBackground(Color.black);
-                            intersection[i][j].setBounds((j + 1)*40 + j*14+100,  i*54+100,14,94);
+                            intersection[i][j].setIcon(model.getAssetsImage().getWallV());
+                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallV());
+                            intersection[i][j].setBounds((j + 1)*40 + j*14+200,  i*54+100,14,94);
                             break;
                         case 2:
                             intersection[i][j].setEnabled(false);
-                            intersection[i][j].setBackground(Color.black);
-                            intersection[i][j].setBounds(j*54+100, (i + 1)*40 + i * 14+100,94,14);
+                            intersection[i][j].setIcon(model.getAssetsImage().getWallH());
+                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallH());
+                            intersection[i][j].setBounds(j*54+200, (i + 1)*40 + i * 14+100,94,14);
                             break;
                     }
                     panel.add(intersection[i][j]);
                 }
             }
-
+            String couleurJoueur="";
+            switch (model.getActivePlayer()){
+                case 1:couleurJoueur="Bleu";
+                    break;
+                case 2:couleurJoueur="Rouge";
+                    break;
+            }
             activePlayer.setSize(400, 200);
             activePlayer.setBackground(Color.black);
-            activePlayer.setText("Joueur " + model.getActivePlayer() + " : c'est à toi !");
-            activePlayer.setBounds(700, 100, 900, 200);
+
+            activePlayer.setText("Joueur " + couleurJoueur + " : c'est à toi !");
+            activePlayer.setBounds(700, 400, 900, 200);
 
             remainingWall.setSize(400, 200);
             remainingWall.setBackground(Color.black);
             remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
-            remainingWall.setBounds(700, 120, 900, 200);
+            remainingWall.setBounds(700, 440, 900, 200);
 
 
             panel.add(verticalWall);
             panel.add(horizontalWall);
             panel.add(activePlayer);
             panel.add(remainingWall);
-        }
-        else if(model.getGameState() == 2){
-            model.changePlayer();
-            panel.setLayout(null);
-            panel.removeAll();
-            System.out.println("-> YOU WIN !");
-            win.setText("Joueur " + model.getActivePlayer() + " a gagné ! BRAVO !");
-            win.setBounds(0, 0, 900, 700);
-            win.setBackground(Color.black);
-            panel.add(win);
         }
         setContentPane(panel);
     }

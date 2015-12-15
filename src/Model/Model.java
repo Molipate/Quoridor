@@ -20,7 +20,12 @@ public class Model {
     private boolean[][] freeWall;
     private boolean[][] freeMove;
 
+    private AssetsImage assetsImage;
+
     public Model(){
+
+        assetsImage = new AssetsImage(this);
+
         gameState = 0;
         typeWall = -1;
         typePlayer = -1;
@@ -52,6 +57,8 @@ public class Model {
         plateau[0][4] = 1;
         plateau[8][4] = 2;
     }
+
+    public AssetsImage getAssetsImage(){ return assetsImage; }
 
     public int getGameState(){
         return gameState;
@@ -120,7 +127,7 @@ public class Model {
         }
     }
 
-    private void makeAllowedMove(int i, int j){
+    public void makeAllowedMove(int i, int j){
 
         for (int k = 0; k <9; k++)
             for (int l = 0; l < 9; l++)
@@ -161,12 +168,10 @@ public class Model {
                 if(plateau[k][l] == typePlayer){
                     plateau[k][l] = 0;
                     plateau[i][j] = typePlayer;
-                    checkWin(i);
                     typePlayer = -1;
                 }
             }
         }
-        changePlayer();
     }
 
     public int getActivePlayer(){
@@ -187,12 +192,35 @@ public class Model {
             return nbWallsJ2;
     }
 
-    public void checkWin(int i) {
-        if(activePlayer == 1 && i == 8)
-            gameState = 2;
+    public int getTypeWall() {
+        return typeWall;
+    }
 
-        if(activePlayer == 2 && i == 0)
-            gameState = 2;
+    public boolean[][] getFreeMove() {
+        return freeMove;
+    }
 
+    public int getTypePlayer() {
+        return typePlayer;
+    }
+
+    public int[][] getWall() {
+        return wall;
+    }
+
+    public boolean[][] getFreeWall() {
+        return freeWall;
+    }
+
+    public int[][] getPlateau() {
+        return plateau;
+    }
+
+    public int getNbWallsJ2() {
+        return nbWallsJ2;
+    }
+
+    public int getNbWallsJ1() {
+        return nbWallsJ1;
     }
 }
