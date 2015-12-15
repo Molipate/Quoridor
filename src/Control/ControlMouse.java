@@ -57,18 +57,22 @@ public class ControlMouse extends Control implements ActionListener {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (actionEvent.getSource() == view.getPlateau(i, j)) {
-                    if(model.getPlateau(i, j) != 0)
-                        if(!model.isPlayerSelected())
-                            model.selectPlayer(model.getPlateau(i, j), i, j);
+
+                    if(model.getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) {
+
+                        if (model.getPlateau(i, j) != 0)
+                            if (!model.isPlayerSelected())
+                                model.selectPlayer(model.getPlateau(i, j), i, j);
+                            else
+                                model.selectPlayer(-1, i, j);
+                        else if (model.isMoveFree(i, j))
+                            model.movePlayer(i, j);
                         else
                             model.selectPlayer(-1, i, j);
-                    else if(model.getPlateau(i, j) == 0 && model.isMoveFree(i, j))
-                        model.movePlayer(i, j);
-                    else
-                        model.selectPlayer(-1, i, j);
 
-                    if(model.isWallSelect())
-                        model.selectWall(-1);
+                        if (model.isWallSelect())
+                            model.selectWall(-1);
+                    }
                     view.makeView();
                 }
             }

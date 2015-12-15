@@ -26,6 +26,7 @@ public class View extends JFrame{
 
     private JLabel activePlayer;
     private JLabel remainingWall;
+    private JLabel win;
 
     public View(Model model) {
         super();
@@ -63,6 +64,8 @@ public class View extends JFrame{
 
         activePlayer = new JLabel();
         remainingWall = new JLabel();
+
+        win = new JLabel();
 
         verticalWall.setBounds(619,356,14,50);
         horizontalWall.setBounds(601, 302,50,14);
@@ -105,7 +108,7 @@ public class View extends JFrame{
                 for (int j = 0; j < 8; j++) {
 
                     intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 100, (i + 1) * 40 + i * 14 + 100, 14, 14);
-                    if (model.isWallSelect() && model.isWallFree(i, j))
+                    if (model.isWallSelect() && model.isWallFree(i, j) && model.getWall(i, j) == 0)
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
                     else if(model.isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
@@ -141,6 +144,16 @@ public class View extends JFrame{
             panel.add(horizontalWall);
             panel.add(activePlayer);
             panel.add(remainingWall);
+        }
+        else if(model.getGameState() == 2){
+            model.changePlayer();
+            panel.setLayout(null);
+            panel.removeAll();
+            System.out.println("-> YOU WIN !");
+            win.setText("Joueur " + model.getActivePlayer() + " a gagné ! BRAVO !");
+            win.setBounds(0, 0, 900, 700);
+            win.setBackground(Color.black);
+            panel.add(win);
         }
         setContentPane(panel);
     }

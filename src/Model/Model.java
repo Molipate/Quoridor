@@ -161,10 +161,12 @@ public class Model {
                 if(plateau[k][l] == typePlayer){
                     plateau[k][l] = 0;
                     plateau[i][j] = typePlayer;
+                    checkWin(i);
                     typePlayer = -1;
                 }
             }
         }
+        changePlayer();
     }
 
     public int getActivePlayer(){
@@ -183,5 +185,14 @@ public class Model {
             return nbWallsJ1;
         else
             return nbWallsJ2;
+    }
+
+    public void checkWin(int i) {
+        if(activePlayer == 1 && i == 8)
+            gameState = 2;
+
+        if(activePlayer == 2 && i == 0)
+            gameState = 2;
+
     }
 }
