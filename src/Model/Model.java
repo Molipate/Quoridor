@@ -58,6 +58,39 @@ public class Model {
         plateau[8][4] = 2;
     }
 
+    public void resetGame(){
+        gameState = 0;
+        typeWall = -1;
+        typePlayer = -1;
+
+        activePlayer = 1;
+        nbWallsJ1 = 10;
+        nbWallsJ2 = 10;
+
+        plateau = new int[9][9];
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+                plateau[i][j] = 0;
+
+        wall = new int[8][8];
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                wall[i][j] = 0;
+
+        freeWall = new boolean[8][8];
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                freeWall[i][j] = true;
+
+        freeMove = new boolean[9][9];
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+                freeMove[i][j] = false;
+
+        plateau[0][4] = 1;
+        plateau[8][4] = 2;
+    }
+
     public AssetsImage getAssetsImage(){ return assetsImage; }
 
     public int getGameState(){

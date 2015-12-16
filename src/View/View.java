@@ -4,6 +4,7 @@ import Control.ControlMouse;
 import Model.Model;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 /**
@@ -155,23 +156,31 @@ public class View extends JFrame{
             activePlayer.setBackground(Color.black);
 
             activePlayer.setText("Joueur " + couleurJoueur + " : c'est à toi !");
-            activePlayer.setBounds(700, 400, 900, 200);
+            activePlayer.setBounds(250,600, 250, 50);
 
             remainingWall.setSize(400, 200);
             remainingWall.setBackground(Color.black);
             remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
-            remainingWall.setBounds(700, 440, 900, 200);
+            remainingWall.setBounds(500, 600, 250, 50);
 
 
             panel.add(verticalWall);
             panel.add(horizontalWall);
             panel.add(activePlayer);
             panel.add(remainingWall);
+            panel.add(newGame);
+            newGame.setBounds(0,0,450,50);
+            newGame.setBorder(BorderFactory.createEmptyBorder());
+            panel.add(quitGame);
+            quitGame.setBounds(450,0,450,50);
+            quitGame.setBorder(BorderFactory.createEmptyBorder());
+
         }
         setContentPane(panel);
     }
 
     public void startNewGame(){
+        model.resetGame();
         model.setGameState(1);
         makeView();
     }
