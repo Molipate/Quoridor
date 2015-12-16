@@ -204,6 +204,7 @@ public class Model {
                 }
             }
         }
+        changePlayer();
     }
 
     public int getActivePlayer(){
