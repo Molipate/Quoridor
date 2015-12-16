@@ -133,21 +133,20 @@ public class Model {
             for (int l = 0; l < 9; l++)
                 freeMove[k][l] = false;
 
-        if(i>=0 || i<9 || j>=0 || j<9){
-            if(i>0 && plateau[i-1][j]==0)freeMove[i-1][j]=true;
-            if(i<8 && plateau[i+1][j]==0)freeMove[i+1][j]=true;
-            if(j>0 && plateau[i][j-1]==0)freeMove[i][j-1]=true;
-            if(j<8 && plateau[i][j+1]==0)freeMove[i][j+1]=true;
+        if(i<0 || i>9 || j<0 || j>9) return;
+        if(i>0 && plateau[i-1][j]==0)freeMove[i-1][j]=true;
+        if(i<8 && plateau[i+1][j]==0)freeMove[i+1][j]=true;
+        if(j>0 && plateau[i][j-1]==0)freeMove[i][j-1]=true;
+        if(j<8 && plateau[i][j+1]==0)freeMove[i][j+1]=true;
 
-            if(i>0 &&((j>0 && wall[i-1][j-1]==1)
-                    ||(j<8 && wall[i-1][j]==1)))freeMove[i-1][j]=false;
-            if(j>0 && ((i>0 && wall[i-1][j-1]==2)
-                    ||(i<8 &&wall[i][j-1]==2)))freeMove[i][j-1]=false;
-            if(i<8 &&((j<8 && wall[i][j]==1)
-                    ||(j>0 && wall[i][j-1]==1)))freeMove[i+1][j]=false;
-            if(j<8 &&((i<8 && wall[i][j]==2)
-                    ||(i>0 && wall[i-1][j]==2)))freeMove[i][j+1]=false;
-        }
+        if(i>0 &&((j>0 && wall[i-1][j-1]==2)
+                ||(j<8 && wall[i-1][j]==2)))freeMove[i-1][j]=false;
+        if(j>0 && ((i>0 && wall[i-1][j-1]==1)
+                ||(i<8 &&wall[i][j-1]==1)))freeMove[i][j-1]=false;
+        if(i<8 &&((j<8 && wall[i][j]==2)
+                ||(j>0 && wall[i][j-1]==2)))freeMove[i+1][j]=false;
+        if(j<8 &&((i<8 && wall[i][j]==1)
+                ||(i>0 && wall[i-1][j]==1)))freeMove[i][j+1]=false;
     }
 
     public void placeWall(int i, int j) {
