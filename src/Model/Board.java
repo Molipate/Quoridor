@@ -8,12 +8,12 @@ public class Board {
     private Model model;
 
     private int[][] plateau;
-    private int[][] wall;
+    protected int[][] wall;
 
     private boolean[][] freeWall;
     private boolean[][] freeMove;
-
-    private int iJ1,jJ1,iJ2,jJ2;
+    protected int lastPutWall;
+    protected int iJ1,jJ1,iJ2,jJ2;
 
     private boolean done = false;
     private boolean[][] visited;
@@ -128,6 +128,10 @@ public class Board {
         wall[i][j]=value;
     }
 
+    public void degageWall(int i, int j){
+        wall[i][j]=0;
+    }
+
     public boolean[][] getFreeWall() {
         return freeWall;
     }
@@ -184,8 +188,8 @@ public class Board {
 
 
 
-/*
-    private boolean makeAllowedIntersection() {
+
+    protected boolean playersNotBlocked() {
         for (int x = 0; x <= 8; x++)
             for (int y = 0; y <= 8; y++)
                 visited[x][y] = false;
@@ -195,11 +199,11 @@ public class Board {
         done = solve(iJ1,jJ1,1);
         return done;
     }
-*/
+
     private boolean solve(int x, int y,int idj) {
         if (x == 0 || y == 0 || x == 9 || y == 9) return false;
         if (visited[x][y]) return false;
-        visited[x][y] = true;
+            visited[x][y] = true;
         if(idj==1)
             if(x==0)
                 done = true;

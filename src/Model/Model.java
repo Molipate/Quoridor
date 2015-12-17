@@ -102,8 +102,16 @@ public class Model {
             nbWallsJ1--;
         else
             nbWallsJ2--;
+        if (board.playersNotBlocked()) {
+            board.lastPutWall = i * 10 + j;
+        }
+        else board.getWall()[i][j]=0;
+        board.lastPutWall=0;
 
-        changePlayer();
+        if (board.lastPutWall!=0)
+            changePlayer();
+        else
+            board.degageWall(i,j);
     }
 
     public void movePlayer(int i, int j){
