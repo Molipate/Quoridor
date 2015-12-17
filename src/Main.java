@@ -4,7 +4,7 @@ import Model.Model;
 /**
  * Created by molipate on 07/12/15.
  */
-public class    Main {
+public class Main {
 
     public static void main(String[] args){
 
