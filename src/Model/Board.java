@@ -190,6 +190,11 @@ public class Board {
 
 
     protected boolean playersNotBlocked() {
+        visited = new boolean[9][9];
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+                visited[i][j] = false;
+
         for (int x = 0; x <= 8; x++)
             for (int y = 0; y <= 8; y++)
                 visited[x][y] = false;
