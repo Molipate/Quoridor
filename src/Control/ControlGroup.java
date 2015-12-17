@@ -10,6 +10,7 @@ public class ControlGroup {
     private Model model;
     private View view;
 
+
     public ControlGroup(Model model) {
 
         this.model = model;

@@ -4,7 +4,6 @@ import Control.ControlMouse;
 import Model.Model;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 /**
@@ -101,7 +100,7 @@ public class View extends JFrame{
                     plateau[i][j].setBounds(j*54+200,i*54+100, 40, 40);
                     plateau[i][j].setContentAreaFilled(false);
                     plateau[i][j].setIcon(model.getAssetsImage().getIcon());
-                    switch (model.getPlateau(i, j)){
+                    switch (model.getBoard().getPlateau(i, j)){
                         case 1:
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                             break;
@@ -109,7 +108,7 @@ public class View extends JFrame{
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                             break;
                     }
-                    if(model.isPlayerSelected() && model.isMoveFree(i, j))
+                    if(model.isPlayerSelected() && model.getBoard().isMoveFree(i, j))
                         plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
                     else
                         plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
@@ -119,16 +118,16 @@ public class View extends JFrame{
 
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-
+                    intersection[i][j].setEnabled(true);
                     intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 200, (i + 1) * 40 + i * 14 + 100, 14, 14);
                     intersection[i][j].setContentAreaFilled(false);
                     intersection[i][j].setIcon(model.getAssetsImage().getIntersection());
-                    if (model.isWallSelect() && model.isWallFree(i, j))
+                    if (model.isWallSelect() && model.getBoard().isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
-                    else if(model.isWallFree(i, j))
+                    else if(model.getBoard().isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createEmptyBorder());
 
-                    switch (model.getWall(i, j)) {
+                    switch (model.getBoard().getWall(i, j)) {
                         case 1:
                             intersection[i][j].setEnabled(false);
                             intersection[i][j].setIcon(model.getAssetsImage().getWallV());

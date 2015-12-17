@@ -34,7 +34,7 @@ public class ControlMouse extends Control implements ActionListener {
 
                 for (int i = 0; i < 9; i++)
                     for (int j = 0; j < 9; j++)
-                        if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                        if (model.getBoard().getPlateau(i, j) != 0 && model.isPlayerSelected())
                             model.selectPlayer(-1, i, j);
 
                 view.makeView();
@@ -49,7 +49,7 @@ public class ControlMouse extends Control implements ActionListener {
 
                 for (int i = 0; i < 9; i++)
                     for (int j = 0; j < 9; j++)
-                        if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                        if (model.getBoard().getPlateau(i, j) != 0 && model.isPlayerSelected())
                             model.selectPlayer(-1, i, j);
 
                 view.makeView();
@@ -60,14 +60,14 @@ public class ControlMouse extends Control implements ActionListener {
             for (int j = 0; j < 9; j++) {
                 if (actionEvent.getSource() == view.getPlateau(i, j)) {
 
-                    if((model.getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) && !model.getWin()) {
+                    if((model.getBoard().getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) && !model.getWin()) {
 
-                        if (model.getPlateau(i, j) != 0)
+                        if (model.getBoard().getPlateau(i, j) != 0)
                             if (!model.isPlayerSelected())
-                                model.selectPlayer(model.getPlateau(i, j), i, j);
+                                model.selectPlayer(model.getBoard().getPlateau(i, j), i, j);
                             else
                                 model.selectPlayer(-1, i, j);
-                        else if (model.isMoveFree(i, j))
+                        else if (model.getBoard().isMoveFree(i, j))
                             model.movePlayer(i, j);
                         else
                             model.selectPlayer(-1, i, j);
@@ -83,7 +83,7 @@ public class ControlMouse extends Control implements ActionListener {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (actionEvent.getSource() == view.getIntersection(i, j)) {
-                    if(model.isWallSelect() && model.isWallFree(i, j)){
+                    if(model.isWallSelect() && model.getBoard().isWallFree(i, j)){
                         System.out.println("-> Placing wall at I : " + i + " - J : " + j);
                         model.placeWall(i, j);
                         view.makeView();
