@@ -24,41 +24,43 @@ public class ControlMouse extends Control implements ActionListener {
         if(actionEvent.getSource() == view.getQuitGame())
             view.leave();
 
-        if(actionEvent.getSource() == view.getVerticalWall()) {
-            System.out.println("-> Selected Vertical Wall");
-            if(!model.isWallSelect())
-                model.selectWall(1);
-            else
-                model.selectWall(-1);
+        if(!model.getWin()){
+            if(actionEvent.getSource() == view.getVerticalWall()) {
+                System.out.println("-> Selected Vertical Wall");
+                if(!model.isWallSelect())
+                    model.selectWall(1);
+                else
+                    model.selectWall(-1);
 
-            for (int i = 0; i < 9; i++)
-                for (int j = 0; j < 9; j++)
-                    if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
-                        model.selectPlayer(-1, i, j);
+                for (int i = 0; i < 9; i++)
+                    for (int j = 0; j < 9; j++)
+                        if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                            model.selectPlayer(-1, i, j);
 
-            view.makeView();
-        }
+                view.makeView();
+            }
 
-        if(actionEvent.getSource() == view.getHorizontalWall()){
-            System.out.println("-> Selected Vertical Wall");
-            if(!model.isWallSelect())
-                model.selectWall(2);
-            else
-                model.selectWall(-1);
+            if(actionEvent.getSource() == view.getHorizontalWall()){
+                System.out.println("-> Selected Vertical Wall");
+                if(!model.isWallSelect())
+                    model.selectWall(2);
+                else
+                    model.selectWall(-1);
 
-            for (int i = 0; i < 9; i++)
-                for (int j = 0; j < 9; j++)
-                    if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
-                        model.selectPlayer(-1, i, j);
+                for (int i = 0; i < 9; i++)
+                    for (int j = 0; j < 9; j++)
+                        if (model.getPlateau(i, j) != 0 && model.isPlayerSelected())
+                            model.selectPlayer(-1, i, j);
 
-            view.makeView();
+                view.makeView();
+            }
         }
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (actionEvent.getSource() == view.getPlateau(i, j)) {
 
-                    if(model.getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) {
+                    if((model.getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) && !model.getWin()) {
 
                         if (model.getPlateau(i, j) != 0)
                             if (!model.isPlayerSelected())

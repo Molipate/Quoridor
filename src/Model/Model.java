@@ -20,6 +20,8 @@ public class Model {
     private boolean[][] freeWall;
     private boolean[][] freeMove;
 
+    private boolean win;
+
     private AssetsImage assetsImage;
 
     public Model(){
@@ -56,6 +58,8 @@ public class Model {
 
         plateau[7][4] = 1;
         plateau[1][4] = 2;
+
+        win = false;
     }
 
     public void resetGame(){
@@ -89,6 +93,8 @@ public class Model {
 
         plateau[7][4] = 1;
         plateau[1][4] = 2;
+
+        win = false;
     }
 
     public AssetsImage getAssetsImage(){ return assetsImage; }
@@ -210,14 +216,18 @@ public class Model {
 
     private void isLaWin(int i) {
         if(i == 8 && activePlayer == 1){
-            gameState = 2;
+            win = true;
             changePlayer();
         }
 
         if(i == 0 && activePlayer == 2){
-            gameState = 2;
+            win = true;
             changePlayer();
         }
+    }
+
+    public boolean getWin(){
+        return win;
     }
 
     public int getActivePlayer(){

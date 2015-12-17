@@ -163,6 +163,9 @@ public class View extends JFrame{
             remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
             remainingWall.setBounds(500, 600, 250, 50);
 
+            if(model.getWin()){
+                activePlayer.setText("Joueur " + couleurJoueur + " : tu as gagné !");
+            }
 
             panel.add(verticalWall);
             panel.add(horizontalWall);
