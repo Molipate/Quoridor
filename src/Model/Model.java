@@ -98,12 +98,12 @@ public class Model {
         board.setWall(i,j,typeWall);
         typeWall = -1;
 
-        if(activePlayer == 1)
-            nbWallsJ1--;
-        else
-            nbWallsJ2--;
         if (board.playersNotBlocked()) {
             board.lastPutWall = i * 10 + j;
+            if(activePlayer == 1)
+                nbWallsJ1--;
+            else
+                nbWallsJ2--;
         }
         else board.getWall()[i][j]=0;
         board.lastPutWall=0;

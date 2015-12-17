@@ -219,10 +219,10 @@ public class Board {
         if (done) return true;
 
 
-        if (freeWall[x][y+1]) solve(x, y + 1,idj);
-        if (freeWall[x+1][y]) solve(x + 1, y,idj);
-        if (freeWall[x][y-1]) solve(x, y - 1,idj);
-        if (freeWall[x-1][y]) solve(x - 1, y,idj);
+        if (freeMove[x][y+1]) solve(x, y + 1,idj);
+        if (freeMove[x+1][y]) solve(x + 1, y,idj);
+        if (freeMove[x][y-1]) solve(x, y - 1,idj);
+        if (freeMove[x-1][y]) solve(x - 1, y,idj);
         return false;
     }
 }
