@@ -4,22 +4,14 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 
-
-
-
-
 public class AssetsImage {
 
     protected Model model;
 
-
     public ImageIcon  IconJ1, IconJ2, WallH, WallV,intersection,Icon,movePossible;
-
-
 
     //gifs
     //public final ImageIcon PawnMove = new ImageIcon(this.getClass().getResource("/image/TutoGif/Pion.gif"));
-
 
     public AssetsImage(Model m) {
 

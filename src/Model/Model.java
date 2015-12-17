@@ -54,8 +54,8 @@ public class Model {
             for (int j = 0; j < 9; j++)
                 freeMove[i][j] = false;
 
-        plateau[0][4] = 1;
-        plateau[8][4] = 2;
+        plateau[7][4] = 1;
+        plateau[1][4] = 2;
     }
 
     public void resetGame(){
@@ -87,8 +87,8 @@ public class Model {
             for (int j = 0; j < 9; j++)
                 freeMove[i][j] = false;
 
-        plateau[0][4] = 1;
-        plateau[8][4] = 2;
+        plateau[7][4] = 1;
+        plateau[1][4] = 2;
     }
 
     public AssetsImage getAssetsImage(){ return assetsImage; }
@@ -201,10 +201,23 @@ public class Model {
                     plateau[k][l] = 0;
                     plateau[i][j] = typePlayer;
                     typePlayer = -1;
+                    isLaWin(i);
                 }
             }
         }
         changePlayer();
+    }
+
+    private void isLaWin(int i) {
+        if(i == 8 && activePlayer == 1){
+            gameState = 2;
+            changePlayer();
+        }
+
+        if(i == 0 && activePlayer == 2){
+            gameState = 2;
+            changePlayer();
+        }
     }
 
     public int getActivePlayer(){
