@@ -21,4 +21,19 @@ public class ModelUnitTest {
         Assert.assertEquals(model.getNbWallsJ2(),10);
 
     }
+
+    @Test
+    public void testResetGame(){
+
+        Model model = new Model();
+
+        model.resetGame();
+
+        Assert.assertEquals(model.getGameState(),1);
+        Assert.assertEquals(model.getTypeWall(),-1);
+        Assert.assertEquals(model.getTypePlayer(),-1);
+        Assert.assertEquals(model.getActivePlayer(),1);
+        Assert.assertEquals(model.getNbWallsJ1(),10);
+        Assert.assertEquals(model.getNbWallsJ2(),10);
+    }
 }

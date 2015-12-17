@@ -40,6 +40,7 @@ public class Model {
         win = false;
     }
 
+    //TESTED BY MOLIPATE
     public void resetGame(){
 
 
@@ -87,8 +88,6 @@ public class Model {
         typePlayer = k;
         makeAllowedMove(i, j);
     }
-
-
 
     public void makeAllowedMove(int i, int j){
         board.makeAllowedMove(i,j);

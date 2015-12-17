@@ -18,5 +18,4 @@ public class BoardUnitTest {
 
         Assert.assertArrayEquals(board.getFreeMove(),freeMove);
     }
-
 }
