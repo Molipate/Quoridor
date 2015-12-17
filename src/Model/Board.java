@@ -13,6 +13,11 @@ public class Board {
     private boolean[][] freeWall;
     private boolean[][] freeMove;
 
+    private int iJ1,jJ1,iJ2,jJ2;
+
+    private boolean done = false;
+    private boolean[][] visited;
+
     public Board(Model m){
         this.model=m;
 
@@ -39,7 +44,10 @@ public class Board {
         plateau[0][4] = 1;
         plateau[8][4] = 2;
 
-
+        iJ1=0;
+        iJ2=8;
+        jJ1=4;
+        jJ2=4;
 
     }
 
@@ -61,6 +69,11 @@ public class Board {
 
         plateau[0][4] = 1;
         plateau[8][4] = 2;
+
+        iJ1=0;
+        iJ2=8;
+        jJ1=4;
+        jJ2=4;
 
     }
 
@@ -166,5 +179,41 @@ public class Board {
                 ||(j>0 && wall[i][j-1]==2)))freeMove[i+1][j]=false;
         if(j<8 &&((i<8 && wall[i][j]==1)
                 ||(i>0 && wall[i-1][j]==1)))freeMove[i][j+1]=false;
+    }
+
+
+
+
+/*
+    private boolean makeAllowedIntersection() {
+        for (int x = 0; x <= 8; x++)
+            for (int y = 0; y <= 8; y++)
+                visited[x][y] = false;
+        done = false;
+        done = solve(iJ2, jJ2,2);
+        if (!done) return false;
+        done = solve(iJ1,jJ1,1);
+        return done;
+    }
+*/
+    private boolean solve(int x, int y,int idj) {
+        if (x == 0 || y == 0 || x == 9 || y == 9) return false;
+        if (visited[x][y]) return false;
+        visited[x][y] = true;
+        if(idj==1)
+            if(x==0)
+                done = true;
+        if(idj==2)
+            if(x==8)
+                done = true;
+
+        if (done) return true;
+
+
+        if (freeWall[x][y+1]) solve(x, y + 1,idj);
+        if (freeWall[x+1][y]) solve(x + 1, y,idj);
+        if (freeWall[x][y-1]) solve(x, y - 1,idj);
+        if (freeWall[x-1][y]) solve(x - 1, y,idj);
+        return false;
     }
 }
