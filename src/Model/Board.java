@@ -99,7 +99,7 @@ public class Board {
                                 freeWall[i][j] = false;
                             break;
                     }
-                }
+                }else freeWall[i][j] = false;
             }
         }
     }

@@ -98,6 +98,11 @@ public class Model {
         board.setWall(i,j,typeWall);
         typeWall = -1;
 
+        if(activePlayer == 1)
+            nbWallsJ1--;
+        else
+            nbWallsJ2--;
+        /*
         if (board.playersNotBlocked()) {
             board.lastPutWall = i * 10 + j;
             if(activePlayer == 1)
@@ -112,6 +117,8 @@ public class Model {
             changePlayer();
         else
             board.degageWall(i,j);
+        */
+        changePlayer();
     }
 
     public void movePlayer(int i, int j){
