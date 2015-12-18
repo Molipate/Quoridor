@@ -71,10 +71,12 @@ public class Model {
         this.gameState = gameState;
     }
 
+    //TESTED
     public boolean isWallSelect() {
         return typeWall != -1;
     }
 
+    //TESTED
     public boolean isPlayerSelected(){
         return typePlayer != -1;
     }
