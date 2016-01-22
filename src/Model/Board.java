@@ -121,16 +121,16 @@ public class Board {
     public boolean[][] getMovePossibles(int Joueur){
         for(int i=0;i<SIZE_P;i++)Arrays.fill(moves_Available[i],false);
         if(Joueur==model.J1){
-            moves_Available[J1Y][J1X-2]=(J1X-2>0 && J1X-2>0 && plateau[J1Y][J1X-1]!=model.WALL);
-            moves_Available[J1Y][J1X+2]=(J1Y+2>SIZE && J1X+2>0 && plateau[J1Y][J1X+1]!=model.WALL);
-            moves_Available[J1Y-2][J1X]=(J1X-2>0 && J1Y-2>0 && plateau[J1Y-1][J1X]!=model.WALL);
-            moves_Available[J1Y+2][J1X]=(J1Y+2<SIZE && J1Y-2>0 && plateau[J1Y+1][J1X]!=model.WALL);
+            moves_Available[J1Y][J1X-2]=isMovePossible(J1Y,J1X,UP);
+            moves_Available[J1Y][J1X+2]=isMovePossible(J1Y,J1X,DOWN);
+            moves_Available[J1Y-2][J1X]=isMovePossible(J1Y,J1X,LEFT);
+            moves_Available[J1Y+2][J1X]=isMovePossible(J1Y,J1X,RIGHT);
         }
         if(Joueur==model.J2){
-            moves_Available[J2Y][J2X-2]=(J2X-2>0 && J2X-2>0 && plateau[J2Y][J2X-1]!=model.WALL);
-            moves_Available[J2Y][J2X+2]=(J2X+2<SIZE && J2X+2>0 && plateau[J2Y][J2X+1]!=model.WALL);
-            moves_Available[J2Y-2][J2X]=(J2Y-2>0 && J2Y-2>0 && plateau[J2Y-1][J2X]!=model.WALL);
-            moves_Available[J2Y+2][J2X]=(J2Y+2<SIZE && J2Y-2>0 && plateau[J2Y+1][J2X]!=model.WALL);
+            moves_Available[J2Y][J2X-2]=isMovePossible(J2Y,J2X,UP);
+            moves_Available[J2Y][J2X+2]=isMovePossible(J2Y,J2X,DOWN);
+            moves_Available[J2Y-2][J2X]=isMovePossible(J2Y,J2X,LEFT);
+            moves_Available[J2Y+2][J2X]=isMovePossible(J2Y,J2X,RIGHT);
         }
         return moves_Available;
     }

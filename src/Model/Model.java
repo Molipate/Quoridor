@@ -9,7 +9,9 @@ public class Model {
 
     public final int J1=1,
                      J2=2,
-                     WALL=3,
+                     J3=3,
+                     J4=4,
+                     WALL=9,
                      MAX_WALL=10;
 
     private static int nbWall_J1,nbWalll_J2;
