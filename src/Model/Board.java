@@ -1,5 +1,8 @@
 package Model;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 /**
  * Created by molipate on 17/12/15.
  */
@@ -8,221 +11,145 @@ public class Board {
     private Model model;
 
     private int[][] plateau;
-    protected int[][] wall;
+    private boolean[][] moves_Available,walls_Available;
+    private final static int SIZE=17,UP=1,DOWN=2,LEFT=3,RIGHT=4;
+    private static int J1X,J1Y,J2X,J2Y;
 
-    private boolean[][] freeWall;
-    private boolean[][] freeMove;
-    protected int lastPutWall;
-    protected int iJ1,jJ1,iJ2,jJ2;
-
-    private boolean done = false;
-    private boolean[][] visited;
 
     public Board(Model m){
         this.model=m;
-
-        plateau = new int[9][9];
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
-                plateau[i][j] = 0;
-
-        wall = new int[8][8];
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                wall[i][j] = 0;
-
-        freeWall = new boolean[8][8];
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                freeWall[i][j] = true;
-
-        freeMove = new boolean[9][9];
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
-                freeMove[i][j] = false;
-
-        plateau[0][4] = 1;
-        plateau[8][4] = 2;
-
-        iJ1=0;
-        iJ2=8;
-        jJ1=4;
-        jJ2=4;
-
+        this.plateau = new int[SIZE][SIZE];
     }
 
-    public void resetGame() {
+    public void initPlateau() {
+        //vide le tableau et init à 0
+        for(int i=0;i<SIZE;i++) Arrays.fill(plateau[i],0);
+        //place les pions j1 et j2
+        plateau[0][9]=model.J1;
+        plateau[9][9]=model.J2;
+        J1Y=0;
+        J1X=9;
+        J2Y=9;
+        J2X=9;
+    }
 
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++){
-                plateau[i][j] = 0;
-                freeMove[i][j] = false;
+    public boolean placeVerticalWall(int i,int j){
+        if(i-1<0 || i+1>=SIZE || i%2==0 || j%2==0)return false;
+        if(plateau[i][j]==model.WALL || plateau[i-1][j]==model.WALL || plateau[i+1][j]==model.WALL)return false;
+        plateau[i-1][j]=model.WALL;
+        plateau[i][j]=model.WALL;
+        plateau[i+1][j]=model.WALL;
+        return true;
+    }
+
+    public boolean placeHorizontalWall(int i,int j){
+        if(j-1<0 || j+1>=SIZE || i%2==0 || j%2==0)return false;
+        if(plateau[i][j]==model.WALL || plateau[i][j-1]==model.WALL || plateau[i][j+1]==model.WALL)return false;
+        plateau[i][j-1]=model.WALL;
+        plateau[i][j]=model.WALL;
+        plateau[i][j+1]=model.WALL;
+        return true;
+    }
+
+    public boolean move_Player(int joueur,int direction){
+        if(joueur==model.J1){
+            switch(direction){
+                case UP:
+                    if(J1Y-2<0 || plateau[J1Y-1][J1X]==model.WALL || plateau[J1Y-2][J1X]==model.J2)return false;
+                    plateau[J1Y][J1X]=0;
+                    plateau[J1Y-2][J1X]=model.J1;
+                    J1Y-=2;
+                    return true;
+                case DOWN:
+                    if(J1Y+2<0 || plateau[J1Y+1][J1X]==model.WALL || plateau[J1Y+2][J1X]==model.J2)return false;
+                    plateau[J1Y][J1X]=0;
+                    plateau[J1Y+2][J1X]=model.J1;
+                    J1Y+=2;
+                    return true;
+                case LEFT:
+                    if(J1X-2<0 || plateau[J1Y][J1X-1]==model.WALL || plateau[J1Y][J1X-2]==model.J2)return false;
+                    plateau[J1Y][J1X]=0;
+                    plateau[J1Y][J1X-2]=model.J1;
+                    J1X-=2;
+                    return true;
+                case RIGHT:
+                    if(J1X+2<0 || plateau[J1Y][J1X+1]==model.WALL || plateau[J1Y][J1X+2]==model.J2)return false;
+                    plateau[J1Y][J1X]=0;
+                    plateau[J1Y][J1X+2]=model.J1;
+                    J1X+=2;
+                    return true;
+                default:
+                    return false;
             }
         }
-
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                wall[i][j] = 0;
-                freeWall[i][j] = true;
+        if(joueur==model.J2){
+            switch(direction){
+                case UP:
+                    if(J2Y-2<0 || plateau[J2Y-1][J2X]==model.WALL || plateau[J2Y-2][J2X]==model.J1)return false;
+                    plateau[J2Y][J2X]=0;
+                    plateau[J2Y-2][J2X]=model.J2;
+                    J2Y-=2;
+                    return true;
+                case DOWN:
+                    if(J2Y+2<0 || plateau[J2Y+1][J2X]==model.WALL || plateau[J2Y+2][J2X]==model.J1)return false;
+                    plateau[J2Y][J2X]=0;
+                    plateau[J2Y+2][J2X]=model.J2;
+                    J2Y+=2;
+                    return true;
+                case LEFT:
+                    if(J2X-2<0 || plateau[J2Y][J2X-1]==model.WALL || plateau[J2Y][J2X-2]==model.J1)return false;
+                    plateau[J2Y][J2X]=0;
+                    plateau[J2Y][J2X-2]=model.J2;
+                    J2X-=2;
+                    return true;
+                case RIGHT:
+                    if(J2X+2<0 || plateau[J2Y][J2X+1]==model.WALL || plateau[J2Y][J2X+2]==model.J1)return false;
+                    plateau[J2Y][J2X]=0;
+                    plateau[J2Y][J2X+2]=model.J2;
+                    J2X+=2;
+                    return true;
+                default:
+                    return false;
             }
         }
-
-        plateau[0][4] = 1;
-        plateau[8][4] = 2;
-
-        iJ1=0;
-        iJ2=8;
-        jJ1=4;
-        jJ2=4;
-
-    }
-
-
-
-    public void makeAllowedIntersection() {
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                freeWall[i][j] = true;
-                if(wall[i][j] == 0){
-                    switch (model.getTypeWall()){
-                        case 1:
-                            if(i > 0 && wall[i - 1][j] == 1)
-                                freeWall[i][j] = false;
-                            if(i < 7 && wall[i + 1][j] == 1)
-                                freeWall[i][j] = false;
-                            break;
-                        case 2:
-                            if(j > 0 && wall[i][j - 1] == 2)
-                                freeWall[i][j] = false;
-                            if(j < 7 && wall[i][j + 1] == 2)
-                                freeWall[i][j] = false;
-                            break;
-                    }
-                }else freeWall[i][j] = false;
-            }
-        }
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public void setModel(Model model) {
-        this.model = model;
-    }
-
-    public int[][] getPlateau() {
-        return plateau;
-    }
-
-    public void setPlateau(int i,int j,int value) {
-        plateau[i][j] = value;
-    }
-
-    public int[][] getWall() {
-        return wall;
-    }
-
-    public void setWall(int i,int j,int value) {
-        wall[i][j]=value;
-    }
-
-    public void degageWall(int i, int j){
-        wall[i][j]=0;
-    }
-
-    public boolean[][] getFreeWall() {
-        return freeWall;
-    }
-
-    public void setFreeWall(boolean[][] freeWall) {
-        this.freeWall = freeWall;
-    }
-
-    public boolean[][] getFreeMove() {
-        return freeMove;
-    }
-
-    public void setFreeMove(boolean[][] freeMove) {
-        this.freeMove = freeMove;
-    }
-
-    public int getPlateau(int i, int j){
-        return plateau[i][j];
-    }
-
-    public int getWall(int i, int j){
-        return wall[i][j];
-    }
-
-    public boolean isWallFree(int i, int j){
-        return freeWall[i][j];
-    }
-
-    public boolean isMoveFree(int i, int j){
-        return freeMove[i][j];
-    }
-
-    public void makeAllowedMove(int i,int j) {
-        for (int k = 0; k <9; k++)
-            for (int l = 0; l < 9; l++)
-                freeMove[k][l] = false;
-
-        if(i<0 || i>9 || j<0 || j>9) return;
-        if(i>0 && plateau[i-1][j]==0)freeMove[i-1][j]=true;
-        if(i<8 && plateau[i+1][j]==0)freeMove[i+1][j]=true;
-        if(j>0 && plateau[i][j-1]==0)freeMove[i][j-1]=true;
-        if(j<8 && plateau[i][j+1]==0)freeMove[i][j+1]=true;
-
-        if(i>0 &&((j>0 && wall[i-1][j-1]==2)
-                ||(j<8 && wall[i-1][j]==2)))freeMove[i-1][j]=false;
-        if(j>0 && ((i>0 && wall[i-1][j-1]==1)
-                ||(i<8 &&wall[i][j-1]==1)))freeMove[i][j-1]=false;
-        if(i<8 &&((j<8 && wall[i][j]==2)
-                ||(j>0 && wall[i][j-1]==2)))freeMove[i+1][j]=false;
-        if(j<8 &&((i<8 && wall[i][j]==1)
-                ||(i>0 && wall[i-1][j]==1)))freeMove[i][j+1]=false;
-    }
-
-
-
-
-
-    protected boolean playersNotBlocked() {
-        visited = new boolean[9][9];
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
-                visited[i][j] = false;
-
-        for (int x = 0; x <= 8; x++)
-            for (int y = 0; y <= 8; y++)
-                visited[x][y] = false;
-        done = false;
-        done = solve(iJ2, jJ2,2);
-        if (!done) return false;
-        done = solve(iJ1,jJ1,1);
-        return done;
-    }
-
-    private boolean solve(int x, int y,int idj) {
-        if (x == 0 || y == 0 || x == 9 || y == 9) return false;
-        if (visited[x][y]) return false;
-            visited[x][y] = true;
-        if(idj==1)
-            if(x==0)
-                done = true;
-        if(idj==2)
-            if(x==8)
-                done = true;
-
-        if (done) return true;
-
-
-        if (freeMove[x][y+1]) solve(x, y + 1,idj);
-        if (freeMove[x+1][y]) solve(x + 1, y,idj);
-        if (freeMove[x][y-1]) solve(x, y - 1,idj);
-        if (freeMove[x-1][y]) solve(x - 1, y,idj);
         return false;
     }
+
+    public boolean[][] getMovePossibles(int Joueur){
+        for(int i=0;i<SIZE;i++)Arrays.fill(moves_Available[i],false);
+        if(Joueur==model.J1){
+            if(J1X-2>0)moves_Available[J1Y][J1X-2]=(J1X-2>0 && plateau[J1Y][J1X-1]!=model.WALL);
+            if(J1Y+2>SIZE)moves_Available[J1Y][J1X+2]=(J1X+2>0 && plateau[J1Y][J1X+1]!=model.WALL);
+            if(J1X-2>0)moves_Available[J1Y-2][J1X]=(J1Y-2>0 && plateau[J1Y-1][J1X]!=model.WALL);
+            if(J1Y+2<SIZE)moves_Available[J1Y+2][J1X]=(J1Y-2>0 && plateau[J1Y+1][J1X]!=model.WALL);
+        }
+        if(Joueur==model.J2){
+            if(J2X-2>0)moves_Available[J2Y][J2X-2]=(J2X-2>0 && plateau[J2Y][J2X-1]!=model.WALL);
+            if(J2X+2<SIZE)moves_Available[J2Y][J2X+2]=(J2X+2>0 && plateau[J2Y][J2X+1]!=model.WALL);
+            if(J2Y-2>0)moves_Available[J2Y-2][J2X]=(J2Y-2>0 && plateau[J2Y-1][J2X]!=model.WALL);
+            if(J2Y+2<SIZE)moves_Available[J2Y+2][J2X]=(J2Y-2>0 && plateau[J2Y+1][J2X]!=model.WALL);
+        }
+        return moves_Available;
+    }
+
+    public boolean isMovePossible(int i,int j,int direction){
+        switch(direction){
+            case UP:
+                return(i-2>0 && plateau[i-2][j]==0 && plateau[i-1][j]!=model.WALL);
+            case DOWN:
+                return(i+2<SIZE && plateau[i+2][j]==0 && plateau[i+1][j]!=model.WALL);
+            case LEFT:
+                return(j-2>0 && plateau[i][j-2]==0 && plateau[i][j-1]!=model.WALL);
+            case RIGHT:
+                return(j+2<SIZE && plateau[i][j+2]==0 && plateau[i][j+1]!=model.WALL);
+            default:
+                return false;
+        }
+    }
+
+    public boolean[][] getWallPossibles(){
+        for(int i=0;i<SIZE;i++)Arrays.fill(walls_Available[i],false);
+
+    }
+
 }
