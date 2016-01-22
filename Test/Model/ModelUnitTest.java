@@ -1,9 +1,13 @@
 package Model;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
+
+import static org.mockito.Mockito.mock;
 
 public class ModelUnitTest {
 
@@ -13,12 +17,27 @@ public class ModelUnitTest {
 
 
 
-        Assert.assertEquals(model.getGameState(),0);
-        Assert.assertEquals(model.getTypeWall(),-1);
-        Assert.assertEquals(model.getTypePlayer(),-1);
-        Assert.assertEquals(model.getActivePlayer(),1);
-        Assert.assertEquals(model.getNbWallsJ1(),10);
-        Assert.assertEquals(model.getNbWallsJ2(),10);
 
     }
+
+    @Test
+    public void testResetGame(){
+
+        Model model = new Model();
+
+        model.resetGame();
+
+    }
+
+    @Test
+    public void testIsWallSelect(){
+
+    }
+
+    @Test
+    public void testIsPlayerSelected(){
+
+    }
+
+
 }

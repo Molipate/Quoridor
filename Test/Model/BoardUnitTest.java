@@ -16,7 +16,19 @@ public class BoardUnitTest {
         for(int i=0;i<9;i++)
             Arrays.fill(freeMove[i],false);
 
-        Assert.assertArrayEquals(board.getFreeMove(),freeMove);
     }
 
+
+    @Test
+    public void testMakeAllowedIntersection(){
+
+        Model model = new Model();
+        Board board = model.getBoard();
+
+        boolean[][] freeWall = new boolean[8][8];
+
+        for(int i=0;i<8;i++)
+            Arrays.fill(freeWall[i],true);
+
+    }
 }

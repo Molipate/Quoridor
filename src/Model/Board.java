@@ -12,13 +12,15 @@ public class Board {
 
     private int[][] plateau;
     private boolean[][] moves_Available,walls_Available;
-    private final static int SIZE=17,UP=1,DOWN=2,LEFT=3,RIGHT=4;
+    private final static int SIZE=17,SIZE_W=8,SIZE_P=9,UP=1,DOWN=2,LEFT=3,RIGHT=4,VERTICAL=1,HORIZONTAL=2;
     private static int J1X,J1Y,J2X,J2Y;
 
 
     public Board(Model m){
         this.model=m;
         this.plateau = new int[SIZE][SIZE];
+        moves_Available= new boolean[SIZE_P][SIZE_P];
+        walls_Available= new boolean[SIZE_W][SIZE_W];
     }
 
     public void initPlateau() {
@@ -33,51 +35,43 @@ public class Board {
         J2X=9;
     }
 
-    public boolean placeVerticalWall(int i,int j){
-        if(i-1<0 || i+1>=SIZE || i%2==0 || j%2==0)return false;
-        if(plateau[i][j]==model.WALL || plateau[i-1][j]==model.WALL || plateau[i+1][j]==model.WALL)return false;
-        plateau[i-1][j]=model.WALL;
-        plateau[i][j]=model.WALL;
-        plateau[i+1][j]=model.WALL;
-        return true;
-    }
-
-    public boolean placeHorizontalWall(int i,int j){
-        if(j-1<0 || j+1>=SIZE || i%2==0 || j%2==0)return false;
-        if(plateau[i][j]==model.WALL || plateau[i][j-1]==model.WALL || plateau[i][j+1]==model.WALL)return false;
-        plateau[i][j-1]=model.WALL;
-        plateau[i][j]=model.WALL;
-        plateau[i][j+1]=model.WALL;
-        return true;
-    }
-
+    /**
+     * move the player if possible or return false
+     * @param joueur
+     * @param direction
+     * @return
+     */
     public boolean move_Player(int joueur,int direction){
         if(joueur==model.J1){
             switch(direction){
                 case UP:
-                    if(J1Y-2<0 || plateau[J1Y-1][J1X]==model.WALL || plateau[J1Y-2][J1X]==model.J2)return false;
-                    plateau[J1Y][J1X]=0;
-                    plateau[J1Y-2][J1X]=model.J1;
-                    J1Y-=2;
-                    return true;
+                    if(isMovePossible(J1X,J1Y,UP)){
+                        plateau[J1Y][J1X]=0;
+                        plateau[J1Y-2][J1X]=model.J1;
+                        J1Y-=2;
+                        return true;
+                    }
                 case DOWN:
-                    if(J1Y+2<0 || plateau[J1Y+1][J1X]==model.WALL || plateau[J1Y+2][J1X]==model.J2)return false;
-                    plateau[J1Y][J1X]=0;
-                    plateau[J1Y+2][J1X]=model.J1;
-                    J1Y+=2;
-                    return true;
+                    if(isMovePossible(J1X,J1Y,DOWN)){
+                        plateau[J1Y][J1X]=0;
+                        plateau[J1Y+2][J1X]=model.J1;
+                        J1Y+=2;
+                        return true;
+                    }
                 case LEFT:
-                    if(J1X-2<0 || plateau[J1Y][J1X-1]==model.WALL || plateau[J1Y][J1X-2]==model.J2)return false;
-                    plateau[J1Y][J1X]=0;
-                    plateau[J1Y][J1X-2]=model.J1;
-                    J1X-=2;
-                    return true;
+                    if(isMovePossible(J1X,J1Y,LEFT)){
+                        plateau[J1Y][J1X]=0;
+                        plateau[J1Y][J1X-2]=model.J1;
+                        J1X-=2;
+                        return true;
+                    }
                 case RIGHT:
-                    if(J1X+2<0 || plateau[J1Y][J1X+1]==model.WALL || plateau[J1Y][J1X+2]==model.J2)return false;
-                    plateau[J1Y][J1X]=0;
-                    plateau[J1Y][J1X+2]=model.J1;
-                    J1X+=2;
-                    return true;
+                    if(isMovePossible(J1X,J1Y,RIGHT)){
+                        plateau[J1Y][J1X]=0;
+                        plateau[J1Y][J1X+2]=model.J1;
+                        J1X+=2;
+                        return true;
+                    }
                 default:
                     return false;
             }
@@ -85,29 +79,33 @@ public class Board {
         if(joueur==model.J2){
             switch(direction){
                 case UP:
-                    if(J2Y-2<0 || plateau[J2Y-1][J2X]==model.WALL || plateau[J2Y-2][J2X]==model.J1)return false;
-                    plateau[J2Y][J2X]=0;
-                    plateau[J2Y-2][J2X]=model.J2;
-                    J2Y-=2;
-                    return true;
+                    if(isMovePossible(J2X,J2Y,UP)){
+                        plateau[J2Y][J2X]=0;
+                        plateau[J2Y-2][J2X]=model.J2;
+                        J2Y-=2;
+                        return true;
+                    }
                 case DOWN:
-                    if(J2Y+2<0 || plateau[J2Y+1][J2X]==model.WALL || plateau[J2Y+2][J2X]==model.J1)return false;
-                    plateau[J2Y][J2X]=0;
-                    plateau[J2Y+2][J2X]=model.J2;
-                    J2Y+=2;
-                    return true;
+                    if(isMovePossible(J2X,J2Y,DOWN)){
+                        plateau[J2Y][J2X]=0;
+                        plateau[J2Y+2][J2X]=model.J2;
+                        J2Y+=2;
+                        return true;
+                    }
                 case LEFT:
-                    if(J2X-2<0 || plateau[J2Y][J2X-1]==model.WALL || plateau[J2Y][J2X-2]==model.J1)return false;
-                    plateau[J2Y][J2X]=0;
-                    plateau[J2Y][J2X-2]=model.J2;
-                    J2X-=2;
-                    return true;
+                    if(isMovePossible(J2X,J2Y,LEFT)){
+                        plateau[J2Y][J2X]=0;
+                        plateau[J2Y][J2X-2]=model.J2;
+                        J2X-=2;
+                        return true;
+                    }
                 case RIGHT:
-                    if(J2X+2<0 || plateau[J2Y][J2X+1]==model.WALL || plateau[J2Y][J2X+2]==model.J1)return false;
-                    plateau[J2Y][J2X]=0;
-                    plateau[J2Y][J2X+2]=model.J2;
-                    J2X+=2;
-                    return true;
+                    if(isMovePossible(J2X,J2Y,RIGHT)){
+                        plateau[J2Y][J2X]=0;
+                        plateau[J2Y][J2X+2]=model.J2;
+                        J2X+=2;
+                        return true;
+                    }
                 default:
                     return false;
             }
@@ -115,23 +113,35 @@ public class Board {
         return false;
     }
 
+    /**
+     * return the moves possibles
+     * @param Joueur
+     * @return
+     */
     public boolean[][] getMovePossibles(int Joueur){
-        for(int i=0;i<SIZE;i++)Arrays.fill(moves_Available[i],false);
+        for(int i=0;i<SIZE_P;i++)Arrays.fill(moves_Available[i],false);
         if(Joueur==model.J1){
-            if(J1X-2>0)moves_Available[J1Y][J1X-2]=(J1X-2>0 && plateau[J1Y][J1X-1]!=model.WALL);
-            if(J1Y+2>SIZE)moves_Available[J1Y][J1X+2]=(J1X+2>0 && plateau[J1Y][J1X+1]!=model.WALL);
-            if(J1X-2>0)moves_Available[J1Y-2][J1X]=(J1Y-2>0 && plateau[J1Y-1][J1X]!=model.WALL);
-            if(J1Y+2<SIZE)moves_Available[J1Y+2][J1X]=(J1Y-2>0 && plateau[J1Y+1][J1X]!=model.WALL);
+            moves_Available[J1Y][J1X-2]=(J1X-2>0 && J1X-2>0 && plateau[J1Y][J1X-1]!=model.WALL);
+            moves_Available[J1Y][J1X+2]=(J1Y+2>SIZE && J1X+2>0 && plateau[J1Y][J1X+1]!=model.WALL);
+            moves_Available[J1Y-2][J1X]=(J1X-2>0 && J1Y-2>0 && plateau[J1Y-1][J1X]!=model.WALL);
+            moves_Available[J1Y+2][J1X]=(J1Y+2<SIZE && J1Y-2>0 && plateau[J1Y+1][J1X]!=model.WALL);
         }
         if(Joueur==model.J2){
-            if(J2X-2>0)moves_Available[J2Y][J2X-2]=(J2X-2>0 && plateau[J2Y][J2X-1]!=model.WALL);
-            if(J2X+2<SIZE)moves_Available[J2Y][J2X+2]=(J2X+2>0 && plateau[J2Y][J2X+1]!=model.WALL);
-            if(J2Y-2>0)moves_Available[J2Y-2][J2X]=(J2Y-2>0 && plateau[J2Y-1][J2X]!=model.WALL);
-            if(J2Y+2<SIZE)moves_Available[J2Y+2][J2X]=(J2Y-2>0 && plateau[J2Y+1][J2X]!=model.WALL);
+            moves_Available[J2Y][J2X-2]=(J2X-2>0 && J2X-2>0 && plateau[J2Y][J2X-1]!=model.WALL);
+            moves_Available[J2Y][J2X+2]=(J2X+2<SIZE && J2X+2>0 && plateau[J2Y][J2X+1]!=model.WALL);
+            moves_Available[J2Y-2][J2X]=(J2Y-2>0 && J2Y-2>0 && plateau[J2Y-1][J2X]!=model.WALL);
+            moves_Available[J2Y+2][J2X]=(J2Y+2<SIZE && J2Y-2>0 && plateau[J2Y+1][J2X]!=model.WALL);
         }
         return moves_Available;
     }
 
+    /**
+     * true if move is possible
+     * @param i
+     * @param j
+     * @param direction
+     * @return
+     */
     public boolean isMovePossible(int i,int j,int direction){
         switch(direction){
             case UP:
@@ -147,9 +157,48 @@ public class Board {
         }
     }
 
-    public boolean[][] getWallPossibles(){
-        for(int i=0;i<SIZE;i++)Arrays.fill(walls_Available[i],false);
-
+    /**
+     * return the possible placement for walls
+     * @param orientation
+     * @return
+     */
+    public boolean[][] getWallPossibles(int orientation){
+        for(int i=0;i<SIZE_W;i++)Arrays.fill(walls_Available[i],false);
+        for(int i=1;i<SIZE-1;i+=2){
+            for(int j=1;j<SIZE-1;j+=2){
+                if(plateau[i][j]!=model.WALL){
+                    walls_Available[i][j]=((orientation==HORIZONTAL && plateau[i][j-1]!=model.WALL && plateau[i][j+1]!=model.WALL)||
+                                           (orientation==VERTICAL && plateau[i-1][j]!=model.WALL && plateau[i+1][j]!=model.WALL));
+                }
+            }
+        }
+        return walls_Available;
     }
 
+    /**
+     * place Wall on board
+     * @param i
+     * @param j
+     * @param orientation
+     * @return
+     */
+    public boolean placeWall(int i,int j,int orientation){
+        if(i%2==0 && j%2==0 && i-1<0 && i+1>SIZE && j-1<0 && j+1>SIZE)return false;
+        if((orientation==HORIZONTAL && plateau[i][j-1]!=model.WALL && plateau[i][j+1]!=model.WALL)||
+           (orientation==VERTICAL && plateau[i-1][j]!=model.WALL && plateau[i+1][j]!=model.WALL)){
+            switch(orientation){
+                case VERTICAL:
+                    plateau[i-1][j]=model.WALL;
+                    plateau[i][j]=model.WALL;
+                    plateau[i+1][j]=model.WALL;
+                    return true;
+                case HORIZONTAL:
+                    plateau[i][j-1]=model.WALL;
+                    plateau[i][j]=model.WALL;
+                    plateau[i][j+1]=model.WALL;
+                    return true;
+            }
+        }
+        return false;
+    }
 }

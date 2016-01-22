@@ -27,6 +27,7 @@ public class Model {
         win = false;
     }
 
+    //TESTED BY MOLIPATE
     public void resetGame(){
         board.initPlateau();
         nbWall_J1=MAX_WALL;
