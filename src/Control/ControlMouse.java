@@ -24,33 +24,17 @@ public class ControlMouse extends Control implements ActionListener {
         if(actionEvent.getSource() == view.getQuitGame())
             view.leave();
 
-        if(!model.getWin()){
+        if(!model.isWin()){
             if(actionEvent.getSource() == view.getVerticalWall()) {
                 System.out.println("-> Selected Vertical Wall");
-                if(!model.isWallSelect())
-                    model.selectWall(1);
-                else
-                    model.selectWall(-1);
 
-                for (int i = 0; i < 9; i++)
-                    for (int j = 0; j < 9; j++)
-                        if (model.getBoard().getPlateau(i, j) != 0 && model.isPlayerSelected())
-                            model.selectPlayer(-1, i, j);
 
                 view.makeView();
             }
 
             if(actionEvent.getSource() == view.getHorizontalWall()){
                 System.out.println("-> Selected Vertical Wall");
-                if(!model.isWallSelect())
-                    model.selectWall(2);
-                else
-                    model.selectWall(-1);
 
-                for (int i = 0; i < 9; i++)
-                    for (int j = 0; j < 9; j++)
-                        if (model.getBoard().getPlateau(i, j) != 0 && model.isPlayerSelected())
-                            model.selectPlayer(-1, i, j);
 
                 view.makeView();
             }
@@ -60,20 +44,9 @@ public class ControlMouse extends Control implements ActionListener {
             for (int j = 0; j < 9; j++) {
                 if (actionEvent.getSource() == view.getPlateau(i, j)) {
 
-                    if((model.getBoard().getPlateau(i, j) == model.getActivePlayer() || model.isPlayerSelected()) && !model.getWin()) {
+                    if((board.getPlateau(i, j) == model.getActive_Player()) && !model.isWin()) {
 
-                        if (model.getBoard().getPlateau(i, j) != 0)
-                            if (!model.isPlayerSelected())
-                                model.selectPlayer(model.getBoard().getPlateau(i, j), i, j);
-                            else
-                                model.selectPlayer(-1, i, j);
-                        else if (model.getBoard().isMoveFree(i, j))
-                            model.movePlayer(i, j);
-                        else
-                            model.selectPlayer(-1, i, j);
 
-                        if (model.isWallSelect())
-                            model.selectWall(-1);
                     }
                     view.makeView();
                 }
@@ -83,9 +56,9 @@ public class ControlMouse extends Control implements ActionListener {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (actionEvent.getSource() == view.getIntersection(i, j)) {
-                    if(model.isWallSelect() && model.getBoard().isWallFree(i, j)){
+                    if(model.getBoard().isWallFree(i, j)){
                         System.out.println("-> Placing wall at I : " + i + " - J : " + j);
-                        model.placeWall(i, j);
+                        board.placeWall(i, j,board.getUP());
                         view.makeView();
                     }
                 }

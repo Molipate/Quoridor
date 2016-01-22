@@ -108,7 +108,7 @@ public class View extends JFrame{
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                             break;
                     }
-                    if(model.isPlayerSelected() && model.getBoard().isMoveFree(i, j))
+                    if(model.getBoard().isMoveFree(i, j))
                         plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
                     else
                         plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
@@ -122,9 +122,9 @@ public class View extends JFrame{
                     intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 200, (i + 1) * 40 + i * 14 + 100, 14, 14);
                     intersection[i][j].setContentAreaFilled(false);
                     intersection[i][j].setIcon(model.getAssetsImage().getIntersection());
-                    if (model.isWallSelect() && model.getBoard().isWallFree(i, j))
+                    if (model.getBoard().isWallFree(i, j))
                         intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
-                    else if(model.getBoard().isWallFree(i, j))
+                    else
                         intersection[i][j].setBorder(BorderFactory.createEmptyBorder());
 
                     switch (model.getBoard().getWall(i, j)) {
@@ -145,11 +145,12 @@ public class View extends JFrame{
                 }
             }
             String couleurJoueur="";
-            switch (model.getActivePlayer()){
-                case 1:couleurJoueur="Bleu";
-                    break;
-                case 2:couleurJoueur="Rouge";
-                    break;
+            switch (Model.getActive_Player()){
+                case 1:couleurJoueur="Bleu";break;
+                case 2:couleurJoueur="Rouge";break;
+                case 3:couleurJoueur="Vert";break;
+                case 4:couleurJoueur="Violet";break;
+                default: return;
             }
             activePlayer.setSize(400, 200);
             activePlayer.setBackground(Color.black);
@@ -162,7 +163,7 @@ public class View extends JFrame{
             remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
             remainingWall.setBounds(500, 600, 250, 50);
 
-            if(model.getWin()){
+            if(model.isWin()){
                 activePlayer.setText("Joueur " + couleurJoueur + " : tu as gagné !");
             }
 

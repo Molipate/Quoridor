@@ -27,8 +27,8 @@ public class Board {
         //vide le tableau et init à 0
         for(int i=0;i<SIZE;i++) Arrays.fill(plateau[i],0);
         //place les pions j1 et j2
-        plateau[0][9]=model.J1;
-        plateau[9][9]=model.J2;
+        plateau[0][(SIZE-1)/2]=model.J1;
+        plateau[SIZE-1][(SIZE-1)/2]=model.J2;
         J1Y=0;
         J1X=9;
         J2Y=9;
@@ -200,5 +200,132 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    public int[][] getPlateau() {
+        return plateau;
+    }
+
+    public void setPlateau(int[][] plateau) {
+        this.plateau = plateau;
+    }
+
+    /**
+     * return the players board
+     * @param i
+     * @param j
+     * @return
+     */
+    public int getPlateau(int i,int j) {
+
+        return plateau[i*2][j*2];
+    }
+
+    public boolean[][] getMoves_Available() {
+        return moves_Available;
+    }
+
+    public void setMoves_Available(boolean[][] moves_Available) {
+        this.moves_Available = moves_Available;
+    }
+
+    public boolean[][] getWalls_Available() {
+        return walls_Available;
+    }
+
+    public void setWalls_Available(boolean[][] walls_Available) {
+        this.walls_Available = walls_Available;
+    }
+
+    public static int getSIZE() {
+        return SIZE;
+    }
+
+    public static int getSizeW() {
+        return SIZE_W;
+    }
+
+    public static int getSizeP() {
+        return SIZE_P;
+    }
+
+    public static int getUP() {
+        return UP;
+    }
+
+    public static int getDOWN() {
+        return DOWN;
+    }
+
+    public static int getLEFT() {
+        return LEFT;
+    }
+
+    public static int getRIGHT() {
+        return RIGHT;
+    }
+
+    public static int getVERTICAL() {
+        return VERTICAL;
+    }
+
+    public static int getHORIZONTAL() {
+        return HORIZONTAL;
+    }
+
+    public static int getJ1X() {
+        return J1X;
+    }
+
+    public static void setJ1X(int j1X) {
+        J1X = j1X;
+    }
+
+    public static int getJ1Y() {
+        return J1Y;
+    }
+
+    public static void setJ1Y(int j1Y) {
+        J1Y = j1Y;
+    }
+
+    public static int getJ2X() {
+        return J2X;
+    }
+
+    public static void setJ2X(int j2X) {
+        J2X = j2X;
+    }
+
+    public static int getJ2Y() {
+        return J2Y;
+    }
+
+    public static void setJ2Y(int j2Y) {
+        J2Y = j2Y;
+    }
+
+    public int getWall(int i, int j) {
+        if(i-1>0 && i+1<SIZE && plateau[i][j]==model.WALL && plateau[i-1][j]==model.WALL && plateau[i+1][j]==model.WALL)
+            return VERTICAL;
+        if(j-1>0 && j+1<SIZE && plateau[i][j]==model.WALL && plateau[i][j-1]==model.WALL && plateau[i][j+1]==model.WALL)
+            return HORIZONTAL;
+        return 0;
+    }
+
+    public boolean isWallFree(int i, int j) {
+        return walls_Available[i][j];
+    }
+
+    public boolean isMoveFree(int i, int j) {
+        return  moves_Available[i][j];
     }
 }

@@ -3,11 +3,9 @@ package Model;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 
-import static org.mockito.Mockito.mock;
 
 public class ModelUnitTest {
 

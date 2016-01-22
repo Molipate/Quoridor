@@ -1,6 +1,7 @@
 package Control;
 
 import Model.Model;
+import Model.Board;
 import View.View;
 
 /**
@@ -10,9 +11,10 @@ public class Control {
 
     protected Model model;
     protected View view;
-
+    protected Board board;
     public Control(Model model, View view){
         this.model = model;
         this.view = view;
+        board=model.getBoard();
     }
 }
