@@ -19,7 +19,6 @@ public class View extends JFrame{
     private JButton quitGame;
 
     private JButton[][] plateau;
-    private JButton[][] intersection;
 
     private JButton verticalWall;
     private JButton horizontalWall;
@@ -35,15 +34,10 @@ public class View extends JFrame{
         this.model = model;
         panel = new JPanel();
 
-        plateau = new JButton[9][9];
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
+        plateau = new JButton[17][17];
+        for (int i = 0; i < 17; i++)
+            for (int j = 0; j < 17; j++)
                 plateau[i][j] = new JButton();
-
-        intersection = new JButton[8][8];
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                intersection[i][j] = new JButton();
 
         initView();
         makeView();
@@ -93,59 +87,40 @@ public class View extends JFrame{
 
             panel.setLayout(null);
             panel.removeAll();
-
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
+            for (int i = 0,y=0; i < 17 && y<9; i+=2,y++) {
+                for (int j = 0,x=0; j < 17 && x<9; j+=2,x++) {
+                    panel.add(plateau[i][j]);
                     plateau[i][j].setSize(new Dimension(40, 40));
-                    plateau[i][j].setBounds(j*54+200,i*54+100, 40, 40);
+                    plateau[i][j].setBounds(x*54+200,y*54+100, 40, 40);
                     plateau[i][j].setContentAreaFilled(false);
                     plateau[i][j].setIcon(model.getAssetsImage().getIcon());
+                    plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
                     switch (model.getBoard().getPlateau(i, j)){
                         case 1:
+                            System.out.print("j1"+i+""+j);
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                             break;
                         case 2:
+                            System.out.print("j2"+i+""+j);
                             plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                             break;
                     }
-                    if(model.getBoard().isMoveFree(i, j))
-                        plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
-                    else
-                        plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
-                    panel.add(plateau[i][j]);
                 }
             }
 
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    intersection[i][j].setEnabled(true);
-                    intersection[i][j].setBounds((j + 1) * 40 + j * 14 + 200, (i + 1) * 40 + i * 14 + 100, 14, 14);
-                    intersection[i][j].setContentAreaFilled(false);
-                    intersection[i][j].setIcon(model.getAssetsImage().getIntersection());
-                    if (model.getBoard().isWallFree(i, j))
-                        intersection[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
-                    else
-                        intersection[i][j].setBorder(BorderFactory.createEmptyBorder());
+            for (int i = 1,y=0; i < 16 && y<9; i+=2,y++) {
+                for (int j = 1,x=0; j < 16 && x<9; j+=2 ,x++) {
+                    panel.add(plateau[i][j]);
+                    plateau[i][j].setEnabled(true);
+                    plateau[i][j].setBounds((x + 1) * 40 + x * 14 + 200, (y + 1) * 40 + y * 14 + 100, 14, 14);
+                    plateau[i][j].setContentAreaFilled(false);
+                    plateau[i][j].setIcon(model.getAssetsImage().getIntersection());
+                    plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
 
-                    switch (model.getBoard().getWall(i, j)) {
-                        case 1:
-                            intersection[i][j].setEnabled(false);
-                            intersection[i][j].setIcon(model.getAssetsImage().getWallV());
-                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallV());
-                            intersection[i][j].setBounds((j + 1)*40 + j*14+200,  i*54+100,14,94);
-                            break;
-                        case 2:
-                            intersection[i][j].setEnabled(false);
-                            intersection[i][j].setIcon(model.getAssetsImage().getWallH());
-                            intersection[i][j].setDisabledIcon(model.getAssetsImage().getWallH());
-                            intersection[i][j].setBounds(j*54+200, (i + 1)*40 + i * 14+100,94,14);
-                            break;
-                    }
-                    panel.add(intersection[i][j]);
                 }
             }
             String couleurJoueur="";
-            switch (Model.getActive_Player()){
+            switch (model.getActive_Player()){
                 case 1:couleurJoueur="Bleu";break;
                 case 2:couleurJoueur="Rouge";break;
                 case 3:couleurJoueur="Vert";break;
@@ -182,6 +157,91 @@ public class View extends JFrame{
         setContentPane(panel);
     }
 
+    public void updateView(){
+
+        String couleurJoueur="";
+        switch (model.getActive_Player()){
+            case 1:couleurJoueur="Bleu";break;
+            case 2:couleurJoueur="Rouge";break;
+            case 3:couleurJoueur="Vert";break;
+            case 4:couleurJoueur="Violet";break;
+            default: return;
+        }
+        activePlayer.setSize(400, 200);
+        activePlayer.setBackground(Color.black);
+
+        activePlayer.setText("Joueur " + couleurJoueur + " : c'est à toi !");
+        activePlayer.setBounds(250,600, 250, 50);
+
+        remainingWall.setSize(400, 200);
+        remainingWall.setBackground(Color.black);
+        remainingWall.setText("Il te reste " + model.getNbWall() + " murs !");
+        remainingWall.setBounds(500, 600, 250, 50);
+
+        if(model.isWin()){
+            activePlayer.setText("Joueur " + couleurJoueur + " : tu as gagné !");
+        }
+    }
+
+    public void updatePlayer(){
+        for(int i=0;i<17;i+=2){
+            for(int j=0;j<17 ;j+=2){
+                System.out.println(""+i+"/"+j);
+               switch (model.getBoard().getPlateau(i,j)){
+                   case 1:plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
+                       break;
+                   case 2:plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
+                       break;
+                   default:
+                       plateau[i][j].setIcon(model.getAssetsImage().getIcon());
+               }
+            }
+        }
+    }
+
+    public void movesPossible(){
+        for(int i=0;i<17;i+=2){
+            for(int j=0;j<17;j+=2){
+                if(model.getBoard().isMoveFree(i,j))
+                    plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
+
+            }
+        }
+    }
+
+    public void updateWalls(){
+        for(int i=1,y=0;i<16;i+=2,y++){
+            for(int j=1,x=0;j<16;j+=2,x++){
+                switch (model.getBoard().getWall(i, j)) {
+                    case 1:
+                        plateau[i][j].setEnabled(false);
+                        plateau[i][j].setIcon(model.getAssetsImage().getWallV());
+                        plateau[i][j].setDisabledIcon(model.getAssetsImage().getWallV());
+                        plateau[i][j].setBounds((x + 1)*40 + x*14+200,  y*54+100,14,94);
+                        break;
+                    case 2:
+                        plateau[i][j].setEnabled(false);
+                        plateau[i][j].setIcon(model.getAssetsImage().getWallH());
+                        plateau[i][j].setDisabledIcon(model.getAssetsImage().getWallH());
+                        plateau[i][j].setBounds(x*54+200, (y + 1)*40 + y * 14+100,94,14);
+                        break;
+                }
+                plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
+            }
+        }
+    }
+
+    public void wallsPossible(){
+        for(int i=1;i<16;i+=2){
+            for(int j=1;j<16;j+=2){
+                if (model.getBoard().isWallFree(i, j))
+                    plateau[i][j].setBorder(BorderFactory.createLineBorder(Color.orange, 3));
+                else
+                    plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
+            }
+        }
+    }
+
     public void startNewGame(){
         model.resetGame();
         model.setGameState(1);
@@ -192,13 +252,13 @@ public class View extends JFrame{
         newGame.addActionListener(mouseListener);
         quitGame.addActionListener(mouseListener);
 
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
+        for (int i = 0; i < 17; i+=2)
+            for (int j = 0; j < 17; j+=2)
                 plateau[i][j].addActionListener(mouseListener);
 
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8 ; j++)
-                intersection[i][j].addActionListener(mouseListener);
+        for (int i = 1; i < 16; i+=2)
+            for (int j = 1; j < 16 ; j+=2)
+                plateau[i][j].addActionListener(mouseListener);
 
         verticalWall.addActionListener(mouseListener);
         horizontalWall.addActionListener(mouseListener);
@@ -216,9 +276,6 @@ public class View extends JFrame{
         return plateau[i][j];
     }
 
-    public JButton getIntersection(int i, int j){
-        return intersection[i][j];
-    }
 
     public JButton getVerticalWall(){
         return verticalWall;

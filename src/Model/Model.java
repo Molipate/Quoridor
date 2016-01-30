@@ -14,7 +14,7 @@ public class Model {
                      WALL=9,
                      MAX_WALL=10;
 
-    private static int nbWall_J1,nbWall_J2,nbWall_J3,nbWall_J4,active_Player,gameState;
+    private static int nbWall_J1,nbWall_J2,nbWall_J3,nbWall_J4,active_Player,gameState,nbJ;
 
     private boolean win;
 
@@ -27,7 +27,7 @@ public class Model {
         assetsImage = new AssetsImage(this);
 
         gameState=0;
-
+        nbJ=2;
         win = false;
     }
 
@@ -41,6 +41,43 @@ public class Model {
         active_Player=J1;
         gameState=1;
         win = false;
+    }
+
+    public void switchPlayer(){
+        switch(active_Player){
+            case J1: active_Player=J2;break;
+            case J2:    if(nbJ==2)active_Player=J1;
+                        else if(nbJ==3)  active_Player=J3;
+                        else if(nbJ==4)  active_Player=J4;
+                        break;
+            case J3:    if(nbJ==3)  active_Player=J1;
+                        else if(nbJ==4)  active_Player=J4;
+                            break;
+            case J4:    if(nbJ==4)active_Player=J1;
+                        break;
+            default: return;
+        }
+    }
+    public void updateNbWall(){
+        switch(active_Player){
+            case J1:nbWall_J1--;
+                break;
+            case J2:nbWall_J2--;
+                break;
+            case J3:nbWall_J3--;
+                break;
+            case J4:nbWall_J4--;
+                break;
+        }
+    }
+    public boolean hasWalls(){
+        switch(active_Player){
+            case J1:return (nbWall_J1>0);
+            case J2:return (nbWall_J2>0);
+            case J3:return (nbWall_J3>0);
+            case J4:return (nbWall_J4>0);
+        }
+        return false;
     }
 
     public AssetsImage getAssetsImage(){ return assetsImage; }
@@ -79,7 +116,7 @@ public class Model {
         return MAX_WALL;
     }
 
-    public static int getActive_Player() {
+    public int getActive_Player() {
         return active_Player;
     }
 
