@@ -1,5 +1,8 @@
 package Model;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import sun.security.provider.certpath.Vertex;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -14,13 +17,16 @@ public class Board {
     private boolean[][] moves_Available,walls_Available;
     public final static int SIZE=17,UP=1,DOWN=2,LEFT=3,RIGHT=4,VERTICAL=1,HORIZONTAL=2;
     private static int J1X,J1Y,J2X,J2Y;
-
+    private RoutesGraph routegraph;
 
     public Board(Model m){
         this.model=m;
         this.plateau = new int[SIZE][SIZE];
         moves_Available= new boolean[SIZE][SIZE];
         walls_Available= new boolean[SIZE][SIZE];
+
+        routegraph = new RoutesGraph(SIZE);
+
     }
 
     public void initPlateau() {
@@ -33,7 +39,7 @@ public class Board {
         J2X=(SIZE-1)/2;
         plateau[J1Y][J1X]=model.J1;
         plateau[J2Y][J2X]=model.J2;
-
+        routegraph.resetChemins();
     }
 
     /**
@@ -143,12 +149,46 @@ public class Board {
 
                     walls_Available[i][j]=((orientation==HORIZONTAL && plateau[i][j-1]<model.WALLH && plateau[i][j+1]<model.WALLH)||
                                            (orientation==VERTICAL && plateau[i-1][j]<model.WALLH && plateau[i+1][j]<model.WALLH));
+                    if(walls_Available[i][j])walls_Available[i][j]=wallNotBlocking(i,j,orientation);
                 }
             }
 
         }
         return walls_Available;
     }
+
+    public boolean wallNotBlocking(int i,int j,int orientation){
+        boolean ret=false;
+        if(orientation==HORIZONTAL){
+            plateau[i][j-1]=model.WALLH;
+            plateau[i][j]=model.WALLH;
+            plateau[i][j+1]=model.WALLH;
+        }else if(orientation==VERTICAL){
+            plateau[i-1][j]=model.WALLV;
+            plateau[i][j]=model.WALLV;
+            plateau[i+1][j]=model.WALLV;
+        }
+
+            ret = findPath();
+
+        if(orientation==HORIZONTAL){
+            plateau[i][j-1]=0;
+            plateau[i][j]=0;
+            plateau[i][j+1]=0;
+        }else if(orientation==VERTICAL){
+            plateau[i-1][j]=0;
+            plateau[i][j]=0;
+            plateau[i+1][j]=0;
+        }
+
+        return ret;
+    }
+
+    public boolean findPath(){
+
+        return true;
+    }
+
 
     /**
      * place Wall on board
@@ -158,6 +198,7 @@ public class Board {
      * @return
      */
     public boolean placeWall(int i,int j,int orientation){
+        int iw=i/2,jw=j/2;
         if((i&1)==0 && (j&1)==0 && i-1<0 && i+1>SIZE && j-1<0 && j+1>SIZE )return false;
         if((orientation==HORIZONTAL && plateau[i][j-1]<model.WALLH && plateau[i][j+1]<model.WALLH)||
            (orientation==VERTICAL && plateau[i-1][j]<model.WALLH && plateau[i+1][j]<model.WALLH)){
@@ -166,11 +207,18 @@ public class Board {
                     plateau[i-1][j]=model.WALLV;
                     plateau[i][j]=model.WALLV;
                     plateau[i+1][j]=model.WALLV;
+
+                    System.out.println(routegraph.disablePath(iw,jw,iw,jw+1));
+                    System.out.println(routegraph.disablePath(iw+1,jw,iw+1,jw+1));
+
                     return true;
                 case HORIZONTAL:
                     plateau[i][j-1]=model.WALLH;
                     plateau[i][j]=model.WALLH;
                     plateau[i][j+1]=model.WALLH;
+
+                    System.out.println(routegraph.disablePath(iw,jw,iw+1,jw));
+                    System.out.println(routegraph.disablePath(iw,jw+1,iw+1,jw+1));
                     return true;
             }
         }
