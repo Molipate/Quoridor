@@ -1,6 +1,8 @@
 package View;
 
-import Control.ControlMouse;
+import Control.ControlBoard;
+import Control.ControlInterface;
+import Control.ControlWall;
 import Model.Model;
 
 import javax.swing.*;
@@ -186,7 +188,6 @@ public class View extends JFrame{
     public void updatePlayer(){
         for(int i=0;i<17;i+=2){
             for(int j=0;j<17 ;j+=2){
-                System.out.println(""+i+"/"+j);
                switch (model.getBoard().getPlateau(i,j)){
                    case 1:plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                        break;
@@ -204,7 +205,6 @@ public class View extends JFrame{
             for(int j=0;j<17;j+=2){
                 if(model.getBoard().isMoveFree(i,j))
                     plateau[i][j].setIcon(model.getAssetsImage().getMovePossible());
-
             }
         }
     }
@@ -248,20 +248,44 @@ public class View extends JFrame{
         makeView();
     }
 
-    public void setMouseListener(ControlMouse mouseListener) {
-        newGame.addActionListener(mouseListener);
-        quitGame.addActionListener(mouseListener);
+    public void setActionListener(ControlInterface menuListener, ControlBoard boardListener, ControlWall wallListener ) {
+        newGame.setActionCommand("NG");
+        newGame.addActionListener(menuListener);
+        quitGame.setActionCommand("QG");
+        quitGame.addActionListener(menuListener);
+        verticalWall.setActionCommand("V");
+        horizontalWall.setActionCommand("H");
+        verticalWall.addActionListener(wallListener);
+        horizontalWall.addActionListener(wallListener);
 
         for (int i = 0; i < 17; i+=2)
             for (int j = 0; j < 17; j+=2)
-                plateau[i][j].addActionListener(mouseListener);
+            {
+                plateau[i][j].setActionCommand(i+","+j);
+                plateau[i][j].addActionListener(boardListener);
+            }
+
 
         for (int i = 1; i < 16; i+=2)
-            for (int j = 1; j < 16 ; j+=2)
-                plateau[i][j].addActionListener(mouseListener);
+            for (int j = 1; j < 16 ; j+=2){
+                plateau[i][j].setActionCommand(i+","+j);
+                plateau[i][j].addActionListener(wallListener);
+            }
 
-        verticalWall.addActionListener(mouseListener);
-        horizontalWall.addActionListener(mouseListener);
+    }
+    public void enableWalls(boolean b){
+        for(int i=1;i<16;i+=2){
+            for(int j=1;j<16;j+=2){
+                plateau[i][j].setEnabled(b);
+            }
+        }
+    }
+    public void enableBoard(boolean b){
+        for(int i=0;i<17;i+=2){
+            for(int j=0;j<17;j+=2){
+                plateau[i][j].setEnabled(b);
+            }
+        }
     }
 
     public JButton getNewGame(){

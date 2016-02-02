@@ -95,16 +95,16 @@ public class Board {
         switch(direction){
             case UP:
                 System.out.println("mPU");
-                return(i-2>0 && plateau[i-2][j]==0 && plateau[i-1][j]!=model.WALL);
+                return(i-2>0 && plateau[i-2][j]==0 && plateau[i-1][j]<model.WALLH);
             case DOWN:
                 System.out.println("mPD");
-                return(i+2<SIZE && plateau[i+2][j]==0 && plateau[i+1][j]!=model.WALL);
+                return(i+2<SIZE && plateau[i+2][j]==0 && plateau[i+1][j]<model.WALLH);
             case LEFT:
                 System.out.println("mPL");
-                return(j-2>0 && plateau[i][j-2]==0 && plateau[i][j-1]!=model.WALL);
+                return(j-2>0 && plateau[i][j-2]==0 && plateau[i][j-1]<model.WALLH);
             case RIGHT:
                 System.out.println("mPR");
-                return(j+2<SIZE && plateau[i][j+2]==0 && plateau[i][j+1]!=model.WALL);
+                return(j+2<SIZE && plateau[i][j+2]==0 && plateau[i][j+1]<model.WALLH);
             default:
                 return false;
         }
@@ -124,10 +124,10 @@ public class Board {
         }
         for(int i=1;i<SIZE-1;i+=2){
             for(int j=1;j<SIZE-1;j+=2){
-                if(plateau[i][j]!=model.WALL){
+                if(plateau[i][j]<model.WALLH){
 
-                    walls_Available[i][j]=((orientation==HORIZONTAL && plateau[i][j-1]!=model.WALL && plateau[i][j+1]!=model.WALL)||
-                                           (orientation==VERTICAL && plateau[i-1][j]!=model.WALL && plateau[i+1][j]!=model.WALL));
+                    walls_Available[i][j]=((orientation==HORIZONTAL && plateau[i][j-1]<model.WALLH && plateau[i][j+1]<model.WALLH)||
+                                           (orientation==VERTICAL && plateau[i-1][j]<model.WALLH && plateau[i+1][j]<model.WALLH));
                 }
             }
 
@@ -144,18 +144,18 @@ public class Board {
      */
     public boolean placeWall(int i,int j,int orientation){
         if((i&1)==0 && (j&1)==0 && i-1<0 && i+1>SIZE && j-1<0 && j+1>SIZE )return false;
-        if((orientation==HORIZONTAL && plateau[i][j-1]!=model.WALL && plateau[i][j+1]!=model.WALL)||
-           (orientation==VERTICAL && plateau[i-1][j]!=model.WALL && plateau[i+1][j]!=model.WALL)){
+        if((orientation==HORIZONTAL && plateau[i][j-1]<model.WALLH && plateau[i][j+1]<model.WALLH)||
+           (orientation==VERTICAL && plateau[i-1][j]<model.WALLH && plateau[i+1][j]<model.WALLH)){
             switch(orientation){
                 case VERTICAL:
-                    plateau[i-1][j]=model.WALL;
-                    plateau[i][j]=model.WALL;
-                    plateau[i+1][j]=model.WALL;
+                    plateau[i-1][j]=model.WALLV;
+                    plateau[i][j]=model.WALLV;
+                    plateau[i+1][j]=model.WALLV;
                     return true;
                 case HORIZONTAL:
-                    plateau[i][j-1]=model.WALL;
-                    plateau[i][j]=model.WALL;
-                    plateau[i][j+1]=model.WALL;
+                    plateau[i][j-1]=model.WALLH;
+                    plateau[i][j]=model.WALLH;
+                    plateau[i][j+1]=model.WALLH;
                     return true;
             }
         }
@@ -267,9 +267,9 @@ public class Board {
     }
 
     public int getWall(int i, int j) {
-        if(i-1>0 && i+1<SIZE && plateau[i][j]==model.WALL && plateau[i-1][j]==model.WALL && plateau[i+1][j]==model.WALL)
+        if(plateau[i][j]==model.WALLV)
             return VERTICAL;
-        if(j-1>0 && j+1<SIZE && plateau[i][j]==model.WALL && plateau[i][j-1]==model.WALL && plateau[i][j+1]==model.WALL)
+        if(plateau[i][j]==model.WALLH)
             return HORIZONTAL;
         return 0;
     }
@@ -280,6 +280,13 @@ public class Board {
 
     public boolean isMoveFree(int i, int j) {
         return  moves_Available[i][j];
+    }
+
+    public void resetMoves(){
+        for(int i=0;i<SIZE;i++)Arrays.fill(this.moves_Available[i],false);
+    }
+    public void resetWalls(){
+        for(int i=0;i<SIZE;i++)Arrays.fill(this.walls_Available[i],false);
     }
 
     public void print(){

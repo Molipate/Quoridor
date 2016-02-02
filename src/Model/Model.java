@@ -11,7 +11,7 @@ public class Model {
                      J2=2,
                      J3=3,
                      J4=4,
-                     WALL=9,
+                     WALLV=9,WALLH=8,
                      MAX_WALL=10;
 
     private static int nbWall_J1,nbWall_J2,nbWall_J3,nbWall_J4,active_Player,gameState,nbJ;
@@ -108,8 +108,12 @@ public class Model {
         return J4;
     }
 
-    public int getWALL() {
-        return WALL;
+    public int getWALLV() {
+        return WALLV;
+    }
+
+    public int getWALLH() {
+        return WALLH;
     }
 
     public int getMAX_WALL() {
