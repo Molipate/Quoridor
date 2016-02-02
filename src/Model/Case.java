@@ -26,6 +26,16 @@ public class Case {
         return chemins;
     }
 
+    public boolean removeChemin(int i,int j){
+        Chemin c = new Chemin(this.i,this.j,i,j);
+        return chemins.remove(c);
+    }
+
+    public void addChemin(int i,int j){
+        Chemin c = new Chemin(this.i,this.j,i,j);
+        chemins.add(c);
+    }
+
     public void resetChemins(int size){
         chemins.clear();
         if(i>0)chemins.add(new Chemin(this.i,this.j,i-1,j));

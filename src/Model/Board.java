@@ -25,8 +25,7 @@ public class Board {
         moves_Available= new boolean[SIZE][SIZE];
         walls_Available= new boolean[SIZE][SIZE];
 
-        routegraph = new RoutesGraph(SIZE);
-
+        routegraph = new RoutesGraph((SIZE+1)/2);
     }
 
     public void initPlateau() {
@@ -149,7 +148,9 @@ public class Board {
 
                     walls_Available[i][j]=((orientation==HORIZONTAL && plateau[i][j-1]<model.WALLH && plateau[i][j+1]<model.WALLH)||
                                            (orientation==VERTICAL && plateau[i-1][j]<model.WALLH && plateau[i+1][j]<model.WALLH));
-                    if(walls_Available[i][j])walls_Available[i][j]=wallNotBlocking(i,j,orientation);
+                    if(walls_Available[i][j]){
+                        walls_Available[i][j]=wallNotBlocking(i,j,orientation);
+                    }
                 }
             }
 
@@ -159,34 +160,44 @@ public class Board {
 
     public boolean wallNotBlocking(int i,int j,int orientation){
         boolean ret=false;
+        int iw=i/2,jw=j/2;
         if(orientation==HORIZONTAL){
-            plateau[i][j-1]=model.WALLH;
-            plateau[i][j]=model.WALLH;
-            plateau[i][j+1]=model.WALLH;
+            routegraph.disablePath(iw,jw,iw+1,jw);
+            routegraph.disablePath(iw,jw+1,iw+1,jw+1);
         }else if(orientation==VERTICAL){
-            plateau[i-1][j]=model.WALLV;
-            plateau[i][j]=model.WALLV;
-            plateau[i+1][j]=model.WALLV;
+            routegraph.disablePath(iw,jw,iw,jw+1);
+            routegraph.disablePath(iw+1,jw,iw+1,jw+1);
         }
 
             ret = findPath();
 
         if(orientation==HORIZONTAL){
-            plateau[i][j-1]=0;
-            plateau[i][j]=0;
-            plateau[i][j+1]=0;
+            routegraph.enablePath(iw,jw,iw+1,jw);
+            routegraph.enablePath(iw,jw+1,iw+1,jw+1);
         }else if(orientation==VERTICAL){
-            plateau[i-1][j]=0;
-            plateau[i][j]=0;
-            plateau[i+1][j]=0;
+            routegraph.enablePath(iw,jw,iw,jw+1);
+            routegraph.enablePath(iw+1,jw,iw+1,jw+1);
         }
 
         return ret;
     }
 
     public boolean findPath(){
-
-        return true;
+        int i,i2,j2;
+        if(model.getActive_Player()==model.getJ1()){
+            i=0;
+            i2=J2Y/2;
+            j2=J2X/2;
+        }else{
+            i=8;
+            i2=J1Y/2;
+            j2=J1X/2;
+        }
+        for (int j=0;j<9;j++){
+            if(routegraph.findChemin(i,j,i2,j2))
+                return true;
+        }
+        return false;
     }
 
 
@@ -208,8 +219,8 @@ public class Board {
                     plateau[i][j]=model.WALLV;
                     plateau[i+1][j]=model.WALLV;
 
-                    System.out.println(routegraph.disablePath(iw,jw,iw,jw+1));
-                    System.out.println(routegraph.disablePath(iw+1,jw,iw+1,jw+1));
+                    routegraph.disablePath(iw,jw,iw,jw+1);
+                    routegraph.disablePath(iw+1,jw,iw+1,jw+1);
 
                     return true;
                 case HORIZONTAL:
@@ -217,8 +228,8 @@ public class Board {
                     plateau[i][j]=model.WALLH;
                     plateau[i][j+1]=model.WALLH;
 
-                    System.out.println(routegraph.disablePath(iw,jw,iw+1,jw));
-                    System.out.println(routegraph.disablePath(iw,jw+1,iw+1,jw+1));
+                    routegraph.disablePath(iw,jw,iw+1,jw);
+                    routegraph.disablePath(iw,jw+1,iw+1,jw+1);
                     return true;
             }
         }
