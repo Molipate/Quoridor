@@ -1,5 +1,6 @@
 import Control.ControlGroup;
 import Model.Model;
+import View.View;
 
 /**
  * Created by molipate on 07/12/15.
@@ -11,7 +12,8 @@ public class Main {
         javax.swing.SwingUtilities.invokeLater( new Runnable() {
             public void run() {
                 Model model = new Model();
-                ControlGroup control = new ControlGroup(model);
+                View view = new View(model);
+                ControlGroup control = new ControlGroup(model,view);
             }
         });
     }

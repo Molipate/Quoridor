@@ -61,6 +61,21 @@ public class Board {
         return false;
     }
 
+    public void verifWin(){
+        if(J2Y==0)model.setWin(true);
+        if(J1Y==SIZE-1)model.setWin(true);
+    }
+
+    public int getActualPlayerI(){
+        if(model.getActive_Player()==model.J1)return J1Y;
+        else return J2Y;
+    }
+
+    public int getActualPlayerJ(){
+        if(model.getActive_Player()==model.J1)return J1X;
+        else return J2X;
+    }
+
     /**
      * return the moves possibles
      * @param Joueur
@@ -95,13 +110,13 @@ public class Board {
         switch(direction){
             case UP:
                 System.out.println("mPU");
-                return(i-2>0 && plateau[i-2][j]==0 && plateau[i-1][j]<model.WALLH);
+                return(i-2>=0 && plateau[i-2][j]==0 && plateau[i-1][j]<model.WALLH);
             case DOWN:
                 System.out.println("mPD");
                 return(i+2<SIZE && plateau[i+2][j]==0 && plateau[i+1][j]<model.WALLH);
             case LEFT:
                 System.out.println("mPL");
-                return(j-2>0 && plateau[i][j-2]==0 && plateau[i][j-1]<model.WALLH);
+                return(j-2>=0 && plateau[i][j-2]==0 && plateau[i][j-1]<model.WALLH);
             case RIGHT:
                 System.out.println("mPR");
                 return(j+2<SIZE && plateau[i][j+2]==0 && plateau[i][j+1]<model.WALLH);

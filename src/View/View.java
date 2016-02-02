@@ -96,6 +96,7 @@ public class View extends JFrame{
                     plateau[i][j].setBounds(x*54+200,y*54+100, 40, 40);
                     plateau[i][j].setContentAreaFilled(false);
                     plateau[i][j].setIcon(model.getAssetsImage().getIcon());
+                    plateau[i][j].setDisabledIcon(null);
                     plateau[i][j].setBorder(BorderFactory.createEmptyBorder());
                     switch (model.getBoard().getPlateau(i, j)){
                         case 1:
@@ -189,9 +190,11 @@ public class View extends JFrame{
         for(int i=0;i<17;i+=2){
             for(int j=0;j<17 ;j+=2){
                switch (model.getBoard().getPlateau(i,j)){
-                   case 1:plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
+                   case 1:
+                       plateau[i][j].setIcon(model.getAssetsImage().getIconJ1());
                        break;
-                   case 2:plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
+                   case 2:
+                       plateau[i][j].setIcon(model.getAssetsImage().getIconJ2());
                        break;
                    default:
                        plateau[i][j].setIcon(model.getAssetsImage().getIcon());
@@ -286,6 +289,14 @@ public class View extends JFrame{
                 plateau[i][j].setEnabled(b);
             }
         }
+    }
+
+    public void setWinDisplay(){
+        if(model.getActive_Player()==model.getJ1())
+            plateau[model.getBoard().getActualPlayerI()][model.getBoard().getActualPlayerJ()].setDisabledIcon(model.getAssetsImage().getIconJ1());
+        else
+            plateau[model.getBoard().getActualPlayerI()][model.getBoard().getActualPlayerJ()].setDisabledIcon(model.getAssetsImage().getIconJ2());
+
     }
 
     public JButton getNewGame(){

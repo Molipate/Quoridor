@@ -11,12 +11,16 @@ public class ControlGroup {
     private View view;
 
 
-    public ControlGroup(Model model) {
+    public ControlGroup(Model model,View view) {
 
         this.model = model;
-        this.view = new View(this.model);
+        this.view = view;
 
-        ControlMouse controleMouse = new ControlMouse(model, view);
+        ControlInterface controleInterface = new ControlInterface(model, view);
+        ControlBoard controleBoard = new ControlBoard(model, view);
+        ControlWall controleWall = new ControlWall(model, view);
+
+        view.setActionListener(controleInterface,controleBoard,controleWall);
         view.display(true);
     }
 }
