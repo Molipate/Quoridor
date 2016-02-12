@@ -26,6 +26,8 @@ public class Board {
         walls_Available= new boolean[SIZE][SIZE];
 
         routegraph = new RoutesGraph((SIZE+1)/2);
+
+
     }
 
     public void initPlateau() {
@@ -39,6 +41,12 @@ public class Board {
         plateau[J1Y][J1X]=model.J1;
         plateau[J2Y][J2X]=model.J2;
         routegraph.resetChemins();
+        routegraph.computePaths(routegraph.getCase(0,3));
+        routegraph.getShortestPathTo(routegraph.getCase(7,5));
+        System.out.print("\n");
+        routegraph.resetAllCases();
+        routegraph.computePaths(routegraph.getCase(0,5));
+        routegraph.getShortestPathTo(routegraph.getCase(7,3));
     }
 
     /**
@@ -90,10 +98,19 @@ public class Board {
         for(int i=0;i<SIZE;i++)Arrays.fill(moves_Available[i],false);
         if(Joueur==model.J1){
 
-            if(J1X-2>=0)moves_Available[J1Y][J1X-2]=isMovePossible(J1Y,J1X,LEFT);
-            if(J1X+2<SIZE)moves_Available[J1Y][J1X+2]=isMovePossible(J1Y,J1X,RIGHT);
-            if(J1Y-2>=0)moves_Available[J1Y-2][J1X]=isMovePossible(J1Y,J1X,UP);
-            if(J1Y+2<SIZE)moves_Available[J1Y+2][J1X]=isMovePossible(J1Y,J1X,DOWN);
+            if(J1X-2>=0){
+                moves_Available[J1Y][J1X-2]=isMovePossible(J1Y,J1X,LEFT);
+            }
+            if(J1X+2<SIZE){
+                moves_Available[J1Y][J1X+2]=isMovePossible(J1Y,J1X,RIGHT);
+            }
+            if(J1Y-2>=0){
+                moves_Available[J1Y-2][J1X]=isMovePossible(J1Y,J1X,UP);
+            }
+            if(J1Y+2<SIZE){
+                moves_Available[J1Y+2][J1X]=isMovePossible(J1Y,J1X,DOWN);
+            }
+
         }
         if(Joueur==model.J2){
             if(J2X-2>=0)moves_Available[J2Y][J2X-2]=isMovePossible(J2Y,J2X,LEFT);
@@ -183,21 +200,19 @@ public class Board {
     }
 
     public boolean findPath(){
-        int i,i2,j2;
-        if(model.getActive_Player()==model.getJ1()){
-            i=0;
-            i2=J2Y/2;
-            j2=J2X/2;
-        }else{
-            i=8;
-            i2=J1Y/2;
-            j2=J1X/2;
-        }
+
+        boolean ret=false,ret2=false;
+
         for (int j=0;j<9;j++){
-            if(routegraph.findChemin(i,j,i2,j2))
+            if(ret==false && routegraph.findChemin(0,j,J2Y/2,J2X/2))
+                ret=true;
+            if(ret2==false && routegraph.findChemin(8,j,J1Y/2,J1X/2))
+                ret2=true;
+            if(ret && ret2)
                 return true;
+
         }
-        return false;
+        return (ret && ret2);
     }
 
 

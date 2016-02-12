@@ -6,42 +6,40 @@ import java.util.List;
 /**
  * Created by lfbarreto on 02/02/16.
  */
-public class Case {
+public class Case implements Comparable<Case>{
 
     private List<Chemin> chemins;
 
+    public double minDistance = Double.POSITIVE_INFINITY;
+    public Case previous=null;
+
     private int i,j;
 
-    public Case(int i,int j,int size){
+    public Case(int i,int j){
         this.i=i;
         this.j=j;
         chemins = new ArrayList<Chemin>();
-        if(i>0)chemins.add(new Chemin(this.i,this.j,i-1,j));
-        if(i<size-1)chemins.add(new Chemin(this.i,this.j,i+1,j));
-        if(j>0)chemins.add(new Chemin(this.i,this.j,i,j-1));
-        if(j<size-1)chemins.add(new Chemin(this.i,this.j,i,j+1));
     }
 
     public List<Chemin> getChemins() {
         return chemins;
     }
 
-    public boolean removeChemin(int i,int j){
-        Chemin c = new Chemin(this.i,this.j,i,j);
+    public boolean removeChemin(Case target){
+        Chemin c = new Chemin(target);
         return chemins.remove(c);
     }
 
-    public void addChemin(int i,int j){
-        Chemin c = new Chemin(this.i,this.j,i,j);
-        chemins.add(c);
+    public void addChemin(Case target){
+        chemins.add(new Chemin(target));
     }
 
-    public void resetChemins(int size){
+    public void resetChemins(){
         chemins.clear();
-        if(i>0)chemins.add(new Chemin(this.i,this.j,i-1,j));
-        if(i<size-1)chemins.add(new Chemin(this.i,this.j,i+1,j));
-        if(j>0)chemins.add(new Chemin(this.i,this.j,i,j-1));
-        if(j<size-1)chemins.add(new Chemin(this.i,this.j,i,j+1));
+    }
+    public void reset() {
+        this.minDistance = Double.POSITIVE_INFINITY;
+        this.previous = null;
     }
 
     public void setChemins(List<Chemin> chemins) {
@@ -49,7 +47,7 @@ public class Case {
     }
 
     public int getI() {
-        return i;
+        return this.i;
     }
 
     public void setI(int i) {
@@ -57,10 +55,31 @@ public class Case {
     }
 
     public int getJ() {
-        return j;
+        return this.j;
     }
 
     public void setJ(int j) {
         this.j = j;
+    }
+
+    public Case getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Case previous) {
+        this.previous = previous;
+    }
+
+    @Override
+    public int compareTo(Case other)
+    {
+        return Double.compare(minDistance, other.minDistance);
+    }
+
+    public boolean equals(Object obj){
+        if(obj == null)return false;
+        if(obj == this)return true;
+        if(!(obj instanceof Case ))return false;
+        return (((Case) obj).getI()==this.i && ((Case) obj).getJ()==this.j );
     }
 }
