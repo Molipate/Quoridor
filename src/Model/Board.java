@@ -268,7 +268,16 @@ public class Board {
     }
 
 
+    public RoutesGraph getRoutegraph() {
+        return routegraph;
+    }
+
+    public void setRoutegraph(RoutesGraph routegraph) {
+        this.routegraph = routegraph;
+    }
+
     /**
+
      * return the players board
      * @param i
      * @param j

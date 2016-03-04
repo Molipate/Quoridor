@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by molipate on 07/12/15.
  */
@@ -80,6 +83,35 @@ public class Model {
         return false;
     }
 
+    public List<Case> shortest_path(int joueur){
+        switch(joueur){
+            case J1:
+                Case j1= this.board.getRoutegraph().getCase(this.board.getRoutegraph().getIJ1(),this.board.getRoutegraph().getJJ1());
+                this.board.getRoutegraph().computePaths(j1);
+                Case min=null;
+                int dist_min=150;
+                for(int j=0;j<9;j++){
+                    if(this.board.getRoutegraph().getCase(8,j).minDistance<=dist_min)
+                        min = this.board.getRoutegraph().getCase(8,j);
+                }
+                return this.board.getRoutegraph().getShortestPathTo(min);
+
+            case J2:
+                Case j2= this.board.getRoutegraph().getCase(this.board.getRoutegraph().getIJ2(),this.board.getRoutegraph().getJJ2());
+                this.board.getRoutegraph().computePaths(j2);
+                Case min2=null;
+                int dist_min2=150;
+                for(int j=0;j<9;j++){
+                    if(this.board.getRoutegraph().getCase(8,j).minDistance<=dist_min2)
+                        min = this.board.getRoutegraph().getCase(0,j);
+                }
+                return this.board.getRoutegraph().getShortestPathTo(min2);
+
+            default:
+                break;
+        }
+        return  null;
+    }
     public AssetsImage getAssetsImage(){ return assetsImage; }
 
     public Board getBoard(){ return board;}
